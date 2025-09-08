@@ -1,4 +1,4 @@
-import { MatchModel } from '../models/match.model.js';
+import { MatchModel } from "../models/match.model.js";
 
 export async function createMatch(data) {
   const match = new MatchModel(data);

@@ -1,85 +1,85 @@
-@import '../scss/mixin';
+@import "../scss/mixin";
 
 .rank__container {
-   width: var(--game-width);
-   height: var(--rank-height);
-   display: flex;
-   justify-content: space-between;
-   border-radius: 1rem;
-   padding: 1rem;
-   border: 0.2rem solid var(--primary-color);
-   box-shadow: 0 0 1rem var(--primary-color);
-   margin-bottom: 1rem;
-   .rank {
-      $width-rank: calc(var(--game-width) / 3);
-      width: $width-rank;
-      display: flex;
-      flex-direction: column;
-      margin: 0rem 0.5rem;
-      .rank__title {
-         width: 100%;
-         $height-rank__title: 30px;
-         height: $height-rank__title;
-         text-align: center;
-         line-height: $height-rank__title;
-         font-size: 1.4rem;
-         font-weight: 600;
-         background-color: var(--bg-color);
-         // border: 0.1rem solid var(--font-color);
-         // border-bottom: 0.5rem solid var(--font-color);
-         // border-radius: 999rem;
-         i {
-            margin-right: 0.5rem;
-            font-size: 1.4rem;
-         }
+  width: var(--game-width);
+  height: var(--rank-height);
+  display: flex;
+  justify-content: space-between;
+  border-radius: 1rem;
+  padding: 1rem;
+  border: 0.2rem solid var(--primary-color);
+  box-shadow: 0 0 1rem var(--primary-color);
+  margin-bottom: 1rem;
+  .rank {
+    $width-rank: calc(var(--game-width) / 3);
+    width: $width-rank;
+    display: flex;
+    flex-direction: column;
+    margin: 0rem 0.5rem;
+    .rank__title {
+      width: 100%;
+      $height-rank__title: 30px;
+      height: $height-rank__title;
+      text-align: center;
+      line-height: $height-rank__title;
+      font-size: 1.4rem;
+      font-weight: 600;
+      background-color: var(--bg-color);
+      // border: 0.1rem solid var(--font-color);
+      // border-bottom: 0.5rem solid var(--font-color);
+      // border-radius: 999rem;
+      i {
+        margin-right: 0.5rem;
+        font-size: 1.4rem;
       }
-      .player_box {
-         width: 100%;
-         height: calc(var(--rank-height));
-         overflow-y: scroll;
-         overflow-x: hidden;
-         background-color: var(--secondary-color);
-         border-top: 0.1rem dotted var(--font-color);
-         border-bottom: 0.1rem dotted var(--font-color);
-         padding: 0rem 10rem 0rem 0rem;
-         @include scrollbar_style(5px, var(--secondary-color), var(--font-color));
-         .player {
-            width: 100%;
-            display: flex;
-            justify-content: right;
-            & > * {
-               margin-right: 10px;
-               font-size: 1rem;
-               opacity: 0.2;
-            }
-            &:nth-child(1) {
-               color: gold;
-               font-weight: bold;
-               & > * {
-                  opacity: 1 !important;
-               }
-            }
-            &:nth-child(2) {
-               color: silver;
-               font-weight: bold;
-               & > * {
-                  opacity: 1 !important;
-               }
-            }
-            &:nth-child(3) {
-               color: darkgoldenrod;
-               font-weight: bold;
-               & > * {
-                  opacity: 1 !important;
-               }
-            }
-         }
+    }
+    .player_box {
+      width: 100%;
+      height: calc(var(--rank-height));
+      overflow-y: scroll;
+      overflow-x: hidden;
+      background-color: var(--secondary-color);
+      border-top: 0.1rem dotted var(--font-color);
+      border-bottom: 0.1rem dotted var(--font-color);
+      padding: 0rem 10rem 0rem 0rem;
+      @include scrollbar_style(5px, var(--secondary-color), var(--font-color));
+      .player {
+        width: 100%;
+        display: flex;
+        justify-content: right;
+        & > * {
+          margin-right: 10px;
+          font-size: 1rem;
+          opacity: 0.2;
+        }
+        &:nth-child(1) {
+          color: gold;
+          font-weight: bold;
+          & > * {
+            opacity: 1 !important;
+          }
+        }
+        &:nth-child(2) {
+          color: silver;
+          font-weight: bold;
+          & > * {
+            opacity: 1 !important;
+          }
+        }
+        &:nth-child(3) {
+          color: darkgoldenrod;
+          font-weight: bold;
+          & > * {
+            opacity: 1 !important;
+          }
+        }
       }
-   }
+    }
+  }
 }
 
 @media screen and (max-width: 1050px) {
-   .rank__container {
-      display: none;
-   }
+  .rank__container {
+    display: none;
+  }
 }

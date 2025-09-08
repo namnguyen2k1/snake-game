@@ -1,5 +1,5 @@
-import { compare, genSalt, hash } from 'bcryptjs';
-import * as userRepo from '../repositories/user.repository.js';
+import { compare, genSalt, hash } from "bcryptjs";
+import * as userRepo from "../repositories/user.repository.js";
 
 export async function registerUser({ name, email, password }) {
   const salt = await genSalt(10);

@@ -1,4 +1,4 @@
-import * as matchRepo from '../repositories/match.repository.js';
+import * as matchRepo from "../repositories/match.repository.js";
 
 export async function createMatch({ name, date, score, time }) {
   return await matchRepo.createMatch({ name, date, score, time });

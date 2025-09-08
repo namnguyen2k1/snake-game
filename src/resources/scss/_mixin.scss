@@ -18,115 +18,115 @@
 //?        .link tham khao: https://css-tricks.com/the-shapes-of-css/
 
 :root {
-   --min_width_moble: 480px;
-   --min_width_tablet: 961px;
-   --min_width_desktop: 1281px;
+  --min_width_moble: 480px;
+  --min_width_tablet: 961px;
+  --min_width_desktop: 1281px;
 }
 
 // reset css basic
 @mixin reset_css() {
-   * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-   }
-   html {
-      scroll-behavior: smooth;
-   }
-   body {
-      font-size: 14px;
-      height: 100vh;
-      width: 100%;
-   }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-size: 14px;
+    height: 100vh;
+    width: 100%;
+  }
 
-   a {
-      color: black;
-      text-decoration: none;
-   }
+  a {
+    color: black;
+    text-decoration: none;
+  }
 
-   ul,
-   li {
-      padding: 0;
-      margin: 0;
-   }
+  ul,
+  li {
+    padding: 0;
+    margin: 0;
+  }
 
-   li {
-      list-style-type: none;
-   }
+  li {
+    list-style-type: none;
+  }
 
-   table,
-   tr,
-   td {
-      border-collapse: collapse;
-   }
+  table,
+  tr,
+  td {
+    border-collapse: collapse;
+  }
 
-   input {
-      border: none;
-      outline: none;
-   }
+  input {
+    border: none;
+    outline: none;
+  }
 }
 
 //Handle layout with flexbox
 @mixin flexbox($direction: row, $content: center, $items: center, $wrap: nowrap) {
-   display: flex;
-   flex-direction: $direction;
-   justify-content: $content;
-   align-items: $items;
-   flex-wrap: $wrap;
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $content;
+  align-items: $items;
+  flex-wrap: $wrap;
 }
 
 // Cắt text với số còn đúng $line dòng, thay phần còn lại bằng '...'
-@mixin truncate_line($line-height: '20px', $lines-clamp: 2) {
-   display: -webkit-box;
-   line-height: #{$line-height};
-   -webkit-line-clamp: $lines-clamp;
-   -webkit-box-orient: vertical;
-   overflow: hidden;
-   text-overflow: ellipsis;
+@mixin truncate_line($line-height: "20px", $lines-clamp: 2) {
+  display: -webkit-box;
+  line-height: #{$line-height};
+  -webkit-line-clamp: $lines-clamp;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /*Set size element*/
 @mixin size($width, $height: $width) {
-   width: $width;
-   height: $height;
+  width: $width;
+  height: $height;
 }
 
 /*custom select text*/
 @mixin style_select_text($color: black, $bg_color: white) {
-   &::selection {
-      background: $bg_color;
-      color: $color;
-   }
+  &::selection {
+    background: $bg_color;
+    color: $color;
+  }
 }
 
 /*CSS Opacity với dự phòng cho IE8+*/
 @mixin opacity($opacity) {
-   opacity: $opacity;
-   $opacity-ie: $opacity * 100;
-   filter: alpha(opacity = $opacity-ie); /*IE8*/
+  opacity: $opacity;
+  $opacity-ie: $opacity * 100;
+  filter: alpha(opacity = $opacity-ie); /*IE8*/
 }
 
 /*media*/ /**/
 $breakpoints: (
-   'phone': 400px,
-   'phone_wide': 480px,
-   'phablet': 560px,
-   'tablet_small': 640px,
-   'tablet': 768px,
-   'tablet_wide': 1024px,
-   'desktop': 1248px,
-   'desktop_wide': 1440px
+  "phone": 400px,
+  "phone_wide": 480px,
+  "phablet": 560px,
+  "tablet_small": 640px,
+  "tablet": 768px,
+  "tablet_wide": 1024px,
+  "desktop": 1248px,
+  "desktop_wide": 1440px,
 );
 @mixin media_queries($width, $type: min) {
-   @if map_has_key($breakpoints, $width) {
-      $width: map_get($breakpoints, $width);
-      @if $type == max {
-         $width: $width - 1px;
-      }
-      @media only screen and (#{$type}-width: $width) {
-         @content;
-      }
-   }
+  @if map_has_key($breakpoints, $width) {
+    $width: map_get($breakpoints, $width);
+    @if $type == max {
+      $width: $width - 1px;
+    }
+    @media only screen and (#{$type}-width: $width) {
+      @content;
+    }
+  }
 }
 
 //  Other aspect ratios to try:
@@ -136,28 +136,28 @@ $breakpoints: (
 //  * 62.5% = 8:5
 
 // responsive with each machine
-@mixin responsive($size: 'mobile') {
-   // syntax thiet lap kich thuoc cho bien
-   $desktop: '(min-width: 1024px)';
-   $tablet: '(min-width: 768px) and (max-width: 1023px)';
-   $mobile: '(max-width: 767px)';
-   @if $size == desktop {
-      @media only screen and #{$desktop} {
-         @content;
-      }
-   } @else if $size == tablet {
-      @media only screen and #{$tablet} {
-         @content;
-      }
-   } @else if $size == mobile {
-      @media only screen and #{$mobile} {
-         @content;
-      }
-   } @else {
-      @media only screen and #{$size} {
-         @content;
-      }
-   }
+@mixin responsive($size: "mobile") {
+  // syntax thiet lap kich thuoc cho bien
+  $desktop: "(min-width: 1024px)";
+  $tablet: "(min-width: 768px) and (max-width: 1023px)";
+  $mobile: "(max-width: 767px)";
+  @if $size == desktop {
+    @media only screen and #{$desktop} {
+      @content;
+    }
+  } @else if $size == tablet {
+    @media only screen and #{$tablet} {
+      @content;
+    }
+  } @else if $size == mobile {
+    @media only screen and #{$mobile} {
+      @content;
+    }
+  } @else {
+    @media only screen and #{$size} {
+      @content;
+    }
+  }
 }
 // Use Example:
 // .wrapper {
@@ -168,29 +168,29 @@ $breakpoints: (
 
 /*Paint Element*/
 @mixin paint($bg-color: grey, $color: black) {
-   background: $bg-color;
-   color: $color;
+  background: $bg-color;
+  color: $color;
 }
 
 // Handle clearfix
 @mixin clearfix-content() {
-   content: '.';
-   display: block;
-   visibility: hidden;
-   clear: both;
+  content: ".";
+  display: block;
+  visibility: hidden;
+  clear: both;
 }
 
 // Custom scrollbar
 @mixin scrollbar_style($width: 10px, $color_track: black, $color_thumb: orangered) {
-   &::-webkit-scrollbar {
-      width: $width;
-   }
-   &::-webkit-scrollbar-track {
-      background-color: $color_track;
-   }
-   &::-webkit-scrollbar-thumb {
-      background-color: $color_thumb;
-   }
+  &::-webkit-scrollbar {
+    width: $width;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: $color_track;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $color_thumb;
+  }
 }
 
 // &::webkit-scrollbar: trỏ đến toàn bộ element của scrollbar.
@@ -199,163 +199,163 @@ $breakpoints: (
 
 // Create Knockout text: // ! set background-color after use!
 @mixin knockout_text() {
-   -webkit-background-clip: text;
-   background-clip: text;
-   -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 @mixin border_start_left_right(
-   $height_border: 5px,
-   $color_border: black,
-   $time_cycle: 0.5s,
-   $start: left
+  $height_border: 5px,
+  $color_border: black,
+  $time_cycle: 0.5s,
+  $start: left
 ) {
-   // set .parent have position: relative; width: max-content;
-   cursor: pointer;
-   &:after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      @if $start == left {
-         left: 0;
-      } @else {
-         right: 0;
-      }
-      height: $height_border;
-      width: 0%;
-      border-radius: 999px;
-      background-color: $color_border;
-      transition: $time_cycle all ease;
-   }
-   &:hover:after {
-      width: 100%;
-   }
+  // set .parent have position: relative; width: max-content;
+  cursor: pointer;
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    @if $start == left {
+      left: 0;
+    } @else {
+      right: 0;
+    }
+    height: $height_border;
+    width: 0%;
+    border-radius: 999px;
+    background-color: $color_border;
+    transition: $time_cycle all ease;
+  }
+  &:hover:after {
+    width: 100%;
+  }
 }
 
 @mixin border_start_center($height_border: 5px, $color_border: black, $time_cycle: 0.5s) {
-   // set .parent have position: relative; width: max-content;
-   cursor: pointer;
-   &:after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      height: $height_border;
-      width: 0;
-      background: $color_border;
-      transition: $time_cycle all ease;
-   }
-   &:hover {
-      &:after {
-         width: 100%;
-      }
-   }
+  // set .parent have position: relative; width: max-content;
+  cursor: pointer;
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: $height_border;
+    width: 0;
+    background: $color_border;
+    transition: $time_cycle all ease;
+  }
+  &:hover {
+    &:after {
+      width: 100%;
+    }
+  }
 }
 
 @mixin border_square($height_border: 5px, $color_border: black, $time_cycle: 0.5s) {
-   // áp dụng cho lớp parent, có một child.
-   &:before,
-   &:after {
-      content: '';
+  // áp dụng cho lớp parent, có một child.
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: $height_border;
+    background: $color_border;
+    transition: 0.5s all ease;
+  }
+  &:before {
+    top: -5px;
+    left: 0;
+  }
+  &:after {
+    bottom: -5px;
+    right: 0;
+  }
+  &:hover:before,
+  &:hover:after {
+    width: 100%;
+    transition: 0.5s all ease;
+  }
+  & > * {
+    position: relative;
+    padding: 5px 10px;
+    &:before,
+    &:after {
+      content: "";
       position: absolute;
-      width: 0%;
-      height: $height_border;
+      width: $height_border;
+      height: 0;
       background: $color_border;
       transition: 0.5s all ease;
-   }
-   &:before {
-      top: -5px;
-      left: 0;
-   }
-   &:after {
-      bottom: -5px;
-      right: 0;
-   }
-   &:hover:before,
-   &:hover:after {
-      width: 100%;
+    }
+    &:before {
+      top: 0;
+      left: -5px;
+    }
+    &:after {
+      bottom: 0;
+      right: -5px;
+    }
+    &:hover {
+      color: $color_border;
       transition: 0.5s all ease;
-   }
-   & > * {
-      position: relative;
-      padding: 5px 10px;
-      &:before,
-      &:after {
-         content: '';
-         position: absolute;
-         width: $height_border;
-         height: 0;
-         background: $color_border;
-         transition: 0.5s all ease;
-      }
-      &:before {
-         top: 0;
-         left: -5px;
-      }
-      &:after {
-         bottom: 0;
-         right: -5px;
-      }
-      &:hover {
-         color: $color_border;
-         transition: 0.5s all ease;
-      }
-      &:hover:before,
-      &:hover:after {
-         height: 100%;
-         transition: 0.5s all ease;
-      }
-   }
+    }
+    &:hover:before,
+    &:hover:after {
+      height: 100%;
+      transition: 0.5s all ease;
+    }
+  }
 }
 
 @mixin draw_triangle($top: top, $color: white, $size: 10px, $left: 25%) {
-   &:before {
-      content: '';
-      position: absolute;
-      @if $top == top {
-         top: -$size;
-         border-bottom: $size solid $color;
-      } @else if $top == bottom {
-         bottom: -$size;
-         border-top: $size solid $color;
-      }
-      left: $left;
-      border-right: $size solid transparent;
-      border-left: $size solid transparent;
-   }
+  &:before {
+    content: "";
+    position: absolute;
+    @if $top == top {
+      top: -$size;
+      border-bottom: $size solid $color;
+    } @else if $top == bottom {
+      bottom: -$size;
+      border-top: $size solid $color;
+    }
+    left: $left;
+    border-right: $size solid transparent;
+    border-left: $size solid transparent;
+  }
 }
 
 @mixin background_animation($bg_color: black, $color: white, $time: 0.5s, $size_border: 5px) {
-   // set elemet have position: relative;
-   &:before {
-      content: '';
-      position: absolute;
-      top: 0%;
-      left: auto;
-      right: 0;
-      width: 0;
-      height: 100%;
-      background-color: $bg_color;
-      border-right: $size_border solid $color;
-      border-top: $size_border/3 solid $color;
-      border-bottom: $size_border/3 solid $color;
-      border-top-right-radius: 999px;
-      border-bottom-right-radius: 999px;
+  // set elemet have position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0%;
+    left: auto;
+    right: 0;
+    width: 0;
+    height: 100%;
+    background-color: $bg_color;
+    border-right: $size_border solid $color;
+    border-top: $size_border/3 solid $color;
+    border-bottom: $size_border/3 solid $color;
+    border-top-right-radius: 999px;
+    border-bottom-right-radius: 999px;
+    transition: $time ease;
+    z-index: -1;
+    opacity: 0%;
+  }
+  &:hover {
+    cursor: pointer;
+    color: $color;
+    transition: 2 * $time ease;
+    &:before {
+      width: 100%;
+      left: 0;
+      right: auto;
       transition: $time ease;
-      z-index: -1;
-      opacity: 0%;
-   }
-   &:hover {
-      cursor: pointer;
-      color: $color;
-      transition: 2 * $time ease;
-      &:before {
-         width: 100%;
-         left: 0;
-         right: auto;
-         transition: $time ease;
-         opacity: 100%;
-      }
-   }
+      opacity: 100%;
+    }
+  }
 }

@@ -1,8 +1,8 @@
 //todo _Thêm các hàm tiện tích hay dùng
-import { convertTime, getRandomInt, listColor, varCss } from './handy_component.js';
+import { convertTime, getRandomInt, listColor, varCss } from "./handy_component.js";
 
 //todo _Thêm các biến, object game
-import { bait, coefficient, dot_snake, ERROR, ESC, game, key, player, SPACE } from './variable.js';
+import { bait, coefficient, dot_snake, ERROR, ESC, game, key, player, SPACE } from "./variable.js";
 //todo _Thêm các hàm điều khiển game
 import {
   ate_bait,
@@ -12,8 +12,8 @@ import {
   change_theme,
   chose_audio,
   show_box,
-  tutorial
-} from './control.js';
+  tutorial,
+} from "./control.js";
 
 //! các biến let, var không thể module hóa được??
 let lenght_snake = []; // mảng chứa độ dài các thân rắn
@@ -25,13 +25,13 @@ let sum_seconds = 0; // tính cho cả hai player
 let speacial_key;
 
 // game_board là một khu vực sử dụng canvas
-let canvas = document.getElementById('Canvas');
-let ctx = canvas.getContext('2d');
+let canvas = document.getElementById("Canvas");
+let ctx = canvas.getContext("2d");
 
 // lấy giá trị từ biến trong css (khi website responsive)
 // dạng string
-const canvasWidth = `${varCss('canvas-width').slice(0, varCss('canvas-width').indexOf('px'))}`;
-const canvasHeight = `${varCss('canvas-height').slice(0, varCss('canvas-height').indexOf('px'))}`;
+const canvasWidth = `${varCss("canvas-width").slice(0, varCss("canvas-width").indexOf("px"))}`;
+const canvasHeight = `${varCss("canvas-height").slice(0, varCss("canvas-height").indexOf("px"))}`;
 
 // parse sang dạng Int
 canvas.width = parseInt(`${canvasWidth}`);
@@ -63,7 +63,7 @@ const initSnake = () => {
         radius: dot_snake.radius,
         score: 10,
         color: `${dot_snake.color}`, // color mồi
-        head: false
+        head: false,
       };
     }
   }
@@ -74,15 +74,15 @@ const drawDot = (dot, index = false) => {
   ctx.beginPath();
   if (index === false) {
     ctx.fillRect(dot.x - 5, dot.y - 5, dot.radius, dot.radius);
-    if (game.theme === 'dark') {
-      ctx.strokeStyle = 'white';
-    } else if (game.theme === 'light') {
-      ctx.strokeStyle = 'black';
+    if (game.theme === "dark") {
+      ctx.strokeStyle = "white";
+    } else if (game.theme === "light") {
+      ctx.strokeStyle = "black";
     }
 
     ctx.lineWidth = Math.floor(dot.radius * 0.3);
     ctx.strokeRect(dot.x - 5, dot.y - 5, dot.radius, dot.radius);
-  } else if (index === 'circle') {
+  } else if (index === "circle") {
     // let lastRadius = dot.radius;
     // if (key_code.la)
     let Oy = dot.y,
@@ -113,7 +113,7 @@ const createBait = () => {
   let special = getRandomInt(10);
   if (special === 0) {
     bait.radius = 30;
-    bait.color = 'gold';
+    bait.color = "gold";
     bait.coefficient = 10;
   }
   // khởi tạo vị trị, màu sắc ngãu nhiên cho bait
@@ -154,12 +154,12 @@ const drawSnake = () => {
     }
     // cho màu đàu snake trùng màu bait
     snake[i][0].color = `${bait.color}`;
-    drawDot(snake[i][0], 'circle');
+    drawDot(snake[i][0], "circle");
   }
 };
 
 // update snake thứ i
-const updateSnake = i => {
+const updateSnake = (i) => {
   // nối thêm dot_snake cho snake
   // let radius = coeff*2;
   for (let j = 0; j < lenght_snake[i].last; j++) {
@@ -171,8 +171,8 @@ const updateSnake = i => {
       y: 100 + 50 * i,
       radius: dot_snake.radius,
       score: 10,
-      color: '', // color mồi
-      head: false
+      color: "", // color mồi
+      head: false,
     };
   }
   // cập nhập màu sắc lại cho snake
@@ -214,7 +214,7 @@ const handleWay = () => {
 
 //todo cập nhập điểm, thời gian play,..
 // xư lý in thời gian
-let time_play = document.getElementById('time_play'); // tính cho cả hai player
+let time_play = document.getElementById("time_play"); // tính cho cả hai player
 const handleTime = () => {
   sum_seconds++;
   time_play.innerText = `${convertTime(sum_seconds)}`;
@@ -240,11 +240,11 @@ const updateScore = (i, fa = false) => {
 };
 
 // đung độ snake thứ i và bait
-const collisionBait = i => {
+const collisionBait = (i) => {
   if (bait.radius === 30) {
-    ate_bait('bait_special');
+    ate_bait("bait_special");
   } else {
-    ate_bait('bait');
+    ate_bait("bait");
   }
 
   // cập nhập thời gian tiêu hóa
@@ -271,14 +271,14 @@ const collisionBait = i => {
 
   if (game.count_player === 1) {
     // 1 player thi chi cap ban than
-    updateScore(i, 'fa');
+    updateScore(i, "fa");
   } else {
     updateScore(i);
   }
   updateSnake(i); // cập nhập thêm dot cho snake i
 };
 
-const collision_wall = current_snake => {
+const collision_wall = (current_snake) => {
   // head_snake collision_wall -> lose()
   if (
     snake[current_snake][0].x <= 0 || // đựng thành trên
@@ -291,14 +291,17 @@ const collision_wall = current_snake => {
   return false;
 };
 
-const collision_other_snake = current_snake => {
+const collision_other_snake = (current_snake) => {
   if (current_snake === 0) return false;
   for (let i = 0; i < game.count_player; i++) {
     // so sánh trên data của các snake khác
     if (i !== current_snake) {
       for (let j = 0; j < lenght_snake[i].current; j++) {
         //! nếu tọa độ head_current_snake == với các dot_snake khác -> lose()
-        if (snake[current_snake][0].x === snake[i][j].x && snake[current_snake][0].y === snake[i][j].y) {
+        if (
+          snake[current_snake][0].x === snake[i][j].x &&
+          snake[current_snake][0].y === snake[i][j].y
+        ) {
           return true; // trả về đụng độ
         }
       }
@@ -308,7 +311,7 @@ const collision_other_snake = current_snake => {
 };
 
 // lấy giá tị key phím nhập vào
-const keyInput = e => {
+const keyInput = (e) => {
   for (let i = 0; i < game.count_player; i++) {
     if (
       e.keyCode === key[i].left ||
@@ -328,9 +331,14 @@ const keyInput = e => {
 };
 
 // phân nhóm key_input
-const partition = input => {
+const partition = (input) => {
   for (let i = 0; i < game.count_player; i++) {
-    if (input === key[i].left || input === key[i].right || input === key[i].up || input === key[i].down) {
+    if (
+      input === key[i].left ||
+      input === key[i].right ||
+      input === key[i].up ||
+      input === key[i].down
+    ) {
       return i + 1; // trả về nhóm key-code player
     }
     // nếu key đầu vào thuộc nhóm đặc biệt
@@ -364,33 +372,33 @@ const get_infor_player = () => {
     // player.name[i] = prompt(`Name player_${i + 1}: `);
     // player.address[i] = prompt(`Address player_${i + 1}: `);
     player.score[i] = 0;
-    player.time_play[i] = '00:00:00';
+    player.time_play[i] = "00:00:00";
     player.day_play[i] = `${day}`;
   }
 };
 // hàm xử lý thua
-const lose = lose_player => {
+const lose = (lose_player) => {
   let time_play = convertTime(sum_seconds);
-  let username = document.getElementById('username-local');
+  let username = document.getElementById("username-local");
   // add cache
   const saved = {
     name: `${username.innerText}`,
     score: `${player.score[0]}`,
     time: `${time_play}`,
-    date: `${player.day_play[0]}`
+    date: `${player.day_play[0]}`,
   };
-  localStorage['match'] = JSON.stringify(saved);
-  console.log(localStorage['match']);
-  let loser_box = document.querySelector('.loser_box');
+  localStorage["match"] = JSON.stringify(saved);
+  console.log(localStorage["match"]);
+  let loser_box = document.querySelector(".loser_box");
   //reset match
-  loser_box.innerHTML = '<h1>Oh không, bạn đã chết!</h1>';
-  chose_audio('lose');
-  document.getElementById('play').innerHTML = 'Start';
+  loser_box.innerHTML = "<h1>Oh không, bạn đã chết!</h1>";
+  chose_audio("lose");
+  document.getElementById("play").innerHTML = "Start";
   if (game.count_player === 1) {
     show_box(4);
     // console.log(player.score[0], player.score[1]);
-    let item = document.createElement('h2');
-    item.classList.add('lose_player');
+    let item = document.createElement("h2");
+    item.classList.add("lose_player");
     item.innerHTML = `Player ${lose_player}.You got ${
       player.score[lose_player - 1]
     } points. Come on, let's play again!!!`;
@@ -412,8 +420,8 @@ const lose = lose_player => {
       if (i + 1 !== lose_player) {
         win_player = i + 1;
       }
-      let item = document.createElement('h2');
-      item.classList.add('lose_player');
+      let item = document.createElement("h2");
+      item.classList.add("lose_player");
       item.innerText = `Player ${i + 1}.You got ${player.score[i]} points. Come on, let's play again!!!`;
       loser_box.appendChild(item);
     }
@@ -431,22 +439,22 @@ const initGame = () => {
   for (let i = 0; i < game.count_player; i++) {
     if (history_match.length === 0) {
       let obj = {
-        name: 'Nguyen Anh Nam',
+        name: "Nguyen Anh Nam",
         score: [],
         time_play: [],
-        date_play: []
+        date_play: [],
       };
       history_match.push(obj);
     }
     // khởi tạo độ dài thân các con rắn
     lenght_snake[i] = {
       current: 10,
-      last: 10
+      last: 10,
     };
     // khởi tạo bộ key_control: mặc định các snake đều đi về bên phải
     key_code[i] = {
       current: key[i].right,
-      last: key[i].right
+      last: key[i].right,
     };
     // điểm từng snake = 0
     player.score[i] = 0;
@@ -478,7 +486,7 @@ const play = () => {
   // xóa màn hình, draw lại hình mới
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   // lấy dự kiện phím khi có phím nhập vào
-  document.onkeydown = e => {
+  document.onkeydown = (e) => {
     // lấy key mới
     const new_key = keyInput(e);
     // phân loại key_input, return mã nhóm player (1, 2,...) hoặc speacial_key
@@ -515,7 +523,7 @@ const play = () => {
       game.is_find_bait[i] = false;
     }
     // ve bait
-    drawDot(bait, 'circle');
+    drawDot(bait, "circle");
     // xử lý ăn mồi
     if (
       // tạo độ nằm trong khoản mồi
@@ -565,26 +573,26 @@ const play = () => {
 
 // dieu khien game
 //dieu khien và xử lý dự kiện play game
-let buttonPlay = document.getElementById('play');
+let buttonPlay = document.getElementById("play");
 buttonPlay.onclick = () => {
   // play chỉ để start game
-  if (buttonPlay.innerText === 'Start' && !game.is_playing) {
+  if (buttonPlay.innerText === "Start" && !game.is_playing) {
     buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause';
     game.is_playing = true;
     get_infor_player();
     show_box(1);
     initGame();
     play();
-    chose_audio('play');
+    chose_audio("play");
   }
 };
 
-window.onkeydown = e => {
+window.onkeydown = (e) => {
   // key space dùng để state/pause and continue game
   const key = keyInput(e);
   if (key !== SPACE) return;
   // bắt đầu game
-  if (buttonPlay.innerText === 'Start' && !game.is_playing) {
+  if (buttonPlay.innerText === "Start" && !game.is_playing) {
     buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause';
     game.is_playing = true;
     show_box(1);
@@ -592,15 +600,20 @@ window.onkeydown = e => {
     initGame();
     time = setInterval(handleTime, 1000);
     play();
-    chose_audio('play');
+    chose_audio("play");
   }
   // đang chơi muốn dừng lai
-  else if ((buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause' && game.is_playing)) {
+  else if (
+    (buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause' && game.is_playing)
+  ) {
     buttonPlay.innerHTML = '<i class="fas fa-caret-square-right"></i> Continue';
     game.is_playing = false;
   }
   // đang dừng muốn chơi lại
-  else if ((buttonPlay.innerHTML = '<i class="fas fa-caret-square-right"></i> Continue' && !game.is_playing)) {
+  else if (
+    (buttonPlay.innerHTML =
+      '<i class="fas fa-caret-square-right"></i> Continue' && !game.is_playing)
+  ) {
     buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause';
     game.is_playing = true;
     requestAnimationFrame(play); // load tiep animation
@@ -618,10 +631,10 @@ window.onkeydown = e => {
  */
 // let register = document.getElementById('register');
 // let login = document.getElementById('login');
-let play_game = document.getElementById('play_game');
-let restart_game = document.querySelectorAll('.restart_game');
-restart_game.forEach(element => {
-  element.addEventListener('click', () => {
+let play_game = document.getElementById("play_game");
+let restart_game = document.querySelectorAll(".restart_game");
+restart_game.forEach((element) => {
+  element.addEventListener("click", () => {
     show_box(1);
     buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause';
     game.is_playing = true;
@@ -630,11 +643,11 @@ restart_game.forEach(element => {
     // cho auto tinh gio lai
     time = setInterval(handleTime, 1000);
     play();
-    chose_audio('play');
+    chose_audio("play");
   });
 });
 
-play_game.addEventListener('click', () => {
+play_game.addEventListener("click", () => {
   show_box(1);
   buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause';
   game.is_playing = true;
@@ -642,12 +655,12 @@ play_game.addEventListener('click', () => {
   initGame();
   play();
   time = setInterval(handleTime, 1000);
-  chose_audio('play');
+  chose_audio("play");
 });
 
 const show_history_match = () => {
-  let box = document.querySelector('.match-local');
-  let data = '';
+  let box = document.querySelector(".match-local");
+  let data = "";
   let lenght = history_match[0].score.length;
   for (let i = 0; i < lenght; i++) {
     let score = history_match[0].score[i];
@@ -665,36 +678,36 @@ const show_history_match = () => {
   box.innerHTML = data;
   show_box(5);
 };
-let view_history = document.querySelectorAll('.view_history');
-view_history.forEach(element => {
-  element.addEventListener('click', () => {
+let view_history = document.querySelectorAll(".view_history");
+view_history.forEach((element) => {
+  element.addEventListener("click", () => {
     show_history_match();
-    chose_audio('end');
+    chose_audio("end");
   });
 });
 
 const getAllMatch = async () => {
-  let username = document.getElementById('username-local');
+  let username = document.getElementById("username-local");
   const option = {
-    name: `${username.innerText}`
+    name: `${username.innerText}`,
   };
-  console.log('name: ', username.innerText);
+  console.log("name: ", username.innerText);
   const fetchOptions = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json'
+      "Content-Type": "application/json",
+      Accept: "application/json",
     },
-    body: JSON.stringify(option)
+    body: JSON.stringify(option),
   };
-  let box = document.querySelector('.match-server');
-  let matches = '';
+  let box = document.querySelector(".match-server");
+  let matches = "";
 
-  await fetch('/api/match/all', fetchOptions)
-    .then(res => {
+  await fetch("/api/match/all", fetchOptions)
+    .then((res) => {
       return res.json();
     })
-    .then(data => {
+    .then((data) => {
       console.log(data.matches);
       for (let match of data.matches) {
         matches += `
@@ -711,20 +724,20 @@ const getAllMatch = async () => {
   box.innerHTML = matches;
 };
 
-const view_infor_player = document.getElementById('view_infor_player');
-view_infor_player.addEventListener('click', async () => {
+const view_infor_player = document.getElementById("view_infor_player");
+view_infor_player.addEventListener("click", async () => {
   await getAllMatch();
   show_box(3);
 });
 
 const default_setting = () => {
-  change_theme('dark'); // theme: {dark, light}
-  change_level('easy'); // level: {easy, medium, hard}
+  change_theme("dark"); // theme: {dark, light}
+  change_level("easy"); // level: {easy, medium, hard}
   change_state_player(1); // number or player: {1 player, 2 player}
   change_speed(1); // speed snake {x1, x2, x3}
   show_box(2); // hiện mục tutorial
   // chose_audio('home');
-  document.getElementById('tutorial').addEventListener('click', tutorial);
+  document.getElementById("tutorial").addEventListener("click", tutorial);
   // setTimeout(tutorial, 2000);
 };
 
