@@ -1,9 +1,10 @@
 //todo _Thêm các hàm tiện tích hay dùng
-import { convertTime, getRandomInt, listColor, varCss } from "./handy_component.js";
+import { convertTime, getRandomInt, listColor, varCss } from "./utils.js";
 
 //todo _Thêm các biến, object game
 import { bait, coefficient, dot_snake, ERROR, ESC, game, key, player, SPACE } from "./variable.js";
 //todo _Thêm các hàm điều khiển game
+import { callApiGetMatchHistory } from "./api.js";
 import {
   ate_bait,
   change_level,
@@ -23,7 +24,7 @@ let snake = []; // snake = là một mảng các child_snake, mỗi child_snake 
 let key_code = [];
 let history_match = [];
 let sum_seconds = 0; // tính cho cả hai player
-let speacial_key;
+let special_key;
 
 // game_board là một khu vực sử dụng canvas
 let canvas = document.getElementById("Canvas");
@@ -435,7 +436,7 @@ const lose = (lose_player) => {
 const initGame = () => {
   lenght_snake = [];
   key_code = [];
-  speacial_key = ERROR;
+  special_key = ERROR;
   game.speedPlay = 1;
   for (let i = 0; i < game.count_player; i++) {
     if (history_match.length === 0) {
@@ -501,7 +502,7 @@ const play = () => {
     }
     // th còn lại cho vào nhóm key đặc biệt (dùng để điều khiển)
     else if (index === 102) {
-      speacial_key = new_key;
+      special_key = new_key;
       // ! mở rộng thêm các tính năng khác
     }
   };
@@ -684,29 +685,15 @@ view_history.forEach((element) => {
 
 const getAllMatch = async () => {
   let username = document.getElementById("username-local");
-  const option = {
-    name: `${username.innerText}`,
-  };
-  console.log("name: ", username.innerText);
-  const fetchOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify(option),
-  };
   let box = document.querySelector(".match-server");
   let matches = "";
 
-  await fetch("/api/match/all", fetchOptions)
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      console.log(data.matches);
-      for (let match of data.matches) {
-        matches += `
+  const data = await callApiGetMatchHistory({
+    name: `${username.innerText}`,
+  });
+
+  for (let match of data.matches) {
+    matches += `
                <tr class="history_item">
                   <td>${match.date}</td>
                   <td>${match.name}</td>
@@ -714,9 +701,7 @@ const getAllMatch = async () => {
                   <td>${match.time}</td>
                </tr>
             `;
-      }
-    })
-    .catch(console.error());
+  }
   box.innerHTML = matches;
 };
 

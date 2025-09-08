@@ -1,85 +1,48 @@
-import { varCss } from "./handy_component.js";
+import { callApiSaveMatchResult } from "./api.js";
+import { DOM } from "./dom.js";
 import { ICONS } from "./icon.js";
+import { varCss } from "./utils.js";
 import { game, theme } from "./variable.js";
 
-let controlTheme = document.getElementById("toggleTheme");
-// thay đổi theme: dark_theme and light_theme
 const change_theme = (stateTheme) => {
-  // nếu game đã run thì không thay đổi được
   if (game.is_playing) return;
+  const applyTheme = (themeKey, icon, addClass, removeClass) => {
+    game.theme = themeKey;
+    DOM.toggleThemeEl.innerHTML = icon;
+    const colors = theme[themeKey];
+    varCss("primary-color", colors.primaryColor);
+    varCss("secondary-color", colors.secondaryColor);
+    varCss("bg-color", colors.bgColor);
+    varCss("heading-color", colors.headingColor);
+    varCss("font-color", colors.fontColor);
+    DOM.bodyEl.classList.add(addClass);
+    DOM.bodyEl.classList.remove(removeClass);
+  };
   if (stateTheme === "light") {
-    game.theme = "light";
-    controlTheme.innerHTML = ICONS.SUN;
-    varCss("primary-color", theme.light.primaryColor);
-    varCss("secondary-color", theme.light.secondaryColor);
-    varCss("bg-color", theme.light.bgColor);
-    varCss("heading-color", theme.light.headingColor);
-    varCss("font-color", theme.light.fontColor);
-    document.querySelector("body").classList.remove("dark_theme");
-    document.querySelector("body").classList.add("light_theme");
-  }
-  if (stateTheme === "dark") {
-    game.theme = "dark";
-    controlTheme.innerHTML = ICONS.MOON;
-    varCss("primary-color", theme.dark.primaryColor);
-    varCss("secondary-color", theme.dark.secondaryColor);
-    varCss("bg-color", theme.dark.bgColor);
-    varCss("heading-color", theme.dark.headingColor);
-    varCss("font-color", theme.dark.fontColor);
-    document.querySelector("body").classList.add("dark_theme");
-    document.querySelector("body").classList.remove("light_theme");
+    applyTheme("light", ICONS.SUN, "light_theme", "dark_theme");
+  } else if (stateTheme === "dark") {
+    applyTheme("dark", ICONS.MOON, "dark_theme", "light_theme");
   }
 };
 
-const toggleTheme = (e) => {
-  if (e.classList.contains("light")) {
-    e.innerHTML = ICONS.MOON;
-    e.classList.remove("light");
+DOM.toggleThemeEl.addEventListener("click", () => {
+  const isLight = DOM.toggleThemeEl.classList.contains("light");
+  if (isLight) {
+    DOM.toggleThemeEl.innerHTML = ICONS.MOON;
+    DOM.toggleThemeEl.classList.remove("light");
     change_theme("dark");
   } else {
-    e.innerHTML = ICONS.SUN;
-    e.classList.add("light");
+    DOM.toggleThemeEl.innerHTML = ICONS.SUN;
+    DOM.toggleThemeEl.classList.add("light");
     change_theme("light");
   }
-};
-
-controlTheme.addEventListener("click", () => {
-  toggleTheme(controlTheme);
 });
 
-// sent data
-let matchData = document.getElementById("submit_score");
 const saveScore = async (e) => {
-  // alert('sent');
-  const data = JSON.parse(localStorage["match"]) || "no match";
-  console.log(data);
-
-  // change icon
+  const match = JSON.parse(localStorage["match"]) || "no match";
   e.classList.remove("far");
   e.classList.add("fas");
-
-  const fetchOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      name: data.name,
-      date: data.date,
-      time: data.time,
-      score: data.score,
-    }),
-  };
-
-  // post to save in server
-  await fetch("/api/match", fetchOptions)
-    .then((res) => {
-      console.log("Request complete! response:", res);
-    })
-    .catch(console.error());
-
-  // reset icon
+  await callApiSaveMatchResult(match);
   setTimeout(() => {
     e.classList.remove("fas");
     e.classList.add("far");
@@ -87,136 +50,103 @@ const saveScore = async (e) => {
 };
 
 let index = 1;
-
-matchData.addEventListener("click", () => {
-  if (index === 1) saveScore(matchData);
+DOM.submitScoreEl.addEventListener("click", () => {
+  if (index === 1) saveScore(DOM.submitScoreEl);
 });
-
-// thay đổi chế độ chơi
 const change_level = (level) => {
-  // nếu game đã run thì không thay đổi được
   if (game.is_playing) return;
-  let level_easy = document.getElementById("easy");
-  level_easy.addEventListener("click", () => {
-    document.getElementById("level").innerHTML = `${ICONS.LV_EASY} Easy`;
-    game.speedPlay /= 1;
-    game.levelPlaying = "easy";
+  const updateLevel = (key, icon, speedFactor) => {
+    DOM.levelDisplayEl.innerHTML = `${icon} ${key.charAt(0).toUpperCase() + key.slice(1)}`;
+    game.speedPlay /= speedFactor;
+    game.levelPlaying = key;
+  };
+  const buttons = [
+    { id: "easy", key: "easy", icon: ICONS.LV_EASY, speed: 1 },
+    { id: "medium", key: "medium", icon: ICONS.LV_MEDIUM, speed: 2 },
+    { id: "hard", key: "hard", icon: ICONS.LV_HARD, speed: 3 },
+  ];
+  buttons.forEach(({ id, key, icon, speed }) => {
+    const btn = DOM.levelButtons[id];
+    if (btn) {
+      btn.addEventListener("click", () => updateLevel(key, icon, speed));
+    }
   });
-  let level_medium = document.getElementById("medium");
-  level_medium.addEventListener("click", () => {
-    document.getElementById("level").innerHTML = `${ICONS.LV_MEDIUM} Medium`;
-    game.speedPlay /= 2;
-    game.levelPlaying = "medium";
-  });
-  let level_hard = document.getElementById("hard");
-  level_hard.addEventListener("click", () => {
-    document.getElementById("level").innerHTML = `${ICONS.LV_HARD} Hard`;
-    game.speedPlay /= 2;
-    game.levelPlaying = "hard";
-  });
-  if (theme === "easy") {
-    document.getElementById("level").innerHTML = `${ICONS.LV_EASY} Easy`;
-    game.speedPlay /= 1;
-    game.levelPlaying = "easy";
-  } else if (theme === "medium") {
-    document.getElementById("level").innerHTML = `${ICONS.LV_MEDIUM} Medium`;
-    game.speedPlay /= 2;
-    game.levelPlaying = "medium";
-  } else if (theme === "hard") {
-    document.getElementById("level").innerHTML = `${ICONS.LV_HARD} Hard`;
-    game.speedPlay /= 3;
-    game.levelPlaying = "hard";
+  if (["easy", "medium", "hard"].includes(level)) {
+    const selected = buttons.find((b) => b.key === level);
+    updateLevel(selected.key, selected.icon, selected.speed);
   }
 };
 
-// thay đổi tốc độ di chuyển snake
 const change_speed = (speed) => {
   if (game.is_playing) return;
-  let speedx1 = document.getElementById("speedx1");
-  speedx1.addEventListener("click", () => {
-    document.getElementById("speed").innerHTML = `${ICONS.SPEED}Speed x1`;
-    game.speedPlay /= 1;
+  const updateSpeed = (multiplier) => {
+    DOM.speedDisplayEl.innerHTML = `${ICONS.SPEED}Speed x${multiplier}`;
+    game.speedPlay /= multiplier;
+  };
+  [1, 2, 3].forEach((multiplier) => {
+    const btn = DOM.speedButtons[`x${multiplier}`];
+    if (btn) {
+      btn.addEventListener("click", () => updateSpeed(multiplier));
+    }
   });
-  let speedx2 = document.getElementById("speedx2");
-  speedx2.addEventListener("click", () => {
-    document.getElementById("speed").innerHTML = `${ICONS.SPEED}Speed x2`;
-    game.speedPlay /= 2;
-  });
-  let speedx3 = document.getElementById("speedx3");
-  speedx3.addEventListener("click", () => {
-    document.getElementById("speed").innerHTML = `${ICONS.SPEED}Speed x3`;
-    game.speedPlay /= 3;
-  });
-  if (speed === 1) {
-    document.getElementById("speed").innerHTML = `${ICONS.SPEED}Speed x1`;
-    game.speedPlay /= 1;
-  } else if (speed === 2) {
-    document.getElementById("speed").innerHTML = `${ICONS.SPEED}Speed x2`;
-    game.speedPlay /= 2;
-  } else if (speed === 3) {
-    document.getElementById("speed").innerHTML = `${ICONS.SPEED}Speed x3`;
-    game.speedPlay /= 3;
+  if ([1, 2, 3].includes(speed)) {
+    updateSpeed(speed);
   }
 };
 
 const change_state_player = (state) => {
   if (game.is_playing) return;
-  let state_alone = document.getElementById("state_alone");
-  state_alone.addEventListener("click", () => {
-    document.getElementById("player").innerHTML = `${ICONS.USER} Player`;
-    game.count_player = 1;
-  });
-  let state_partner = document.getElementById("state_partner");
-  state_partner.addEventListener("click", () => {
-    document.getElementById("player").innerHTML = `${ICONS.USER} ${ICONS.USER} Player`;
-    game.count_player = 2;
-  });
-  if (state === 1) {
-    document.getElementById("player").innerHTML = `${ICONS.USER} Player`;
-    game.count_player = 1;
-  } else if (state === 2) {
-    document.getElementById("player").innerHTML = `${ICONS.USER}${ICONS.USER} Player`;
-    game.count_player = 2;
+  const updateState = (count) => {
+    const icons = count === 1 ? `${ICONS.USER}` : `${ICONS.USER} ${ICONS.USER}`;
+    DOM.playerDisplayEl.innerHTML = `${icons} Player`;
+    game.count_player = count;
+  };
+  const aloneBtn = DOM.playerButtons.alone;
+  if (aloneBtn) {
+    aloneBtn.addEventListener("click", () => updateState(1));
+  }
+  const partnerBtn = DOM.playerButtons.partner;
+  if (partnerBtn) {
+    partnerBtn.addEventListener("click", () => updateState(2));
+  }
+  if ([1, 2].includes(state)) {
+    updateState(state);
   }
 };
-
-// change state audio
-let controlAudio = document.getElementById("control_audio");
 
 let chose_audio = (audio_name) => {
   let audio = document.getElementById("Audio");
   audio.src = `/audio/${audio_name}_music.mp3`;
   audio.play();
   audio.classList.remove("pause");
-  controlAudio.innerHTML = ICONS.AUDIO_PLAY;
+  DOM.controlAudioEl.innerHTML = ICONS.AUDIO_PLAY;
 };
 
-controlAudio.addEventListener("click", () => {
-  let audio = document.getElementById("Audio");
+DOM.controlAudioEl.addEventListener("click", () => {
+  let audio = DOM.audioMainEl;
   if (audio.classList.contains("pause")) {
     audio.play();
     audio.classList.remove("pause");
-    controlAudio.innerHTML = ICONS.AUDIO_PLAY;
+    DOM.controlAudioEl.innerHTML = ICONS.AUDIO_PLAY;
   } else {
     audio.pause();
     audio.classList.add("pause");
-    controlAudio.innerHTML = ICONS.AUDIO_PAUSE;
+    DOM.controlAudioEl.innerHTML = ICONS.AUDIO_PAUSE;
   }
 });
 
 const ate_bait = (audio_name) => {
-  let audio = document.getElementById("Audio_bait");
+  let audio = DOM.audioBaitEl;
   audio.src = `/audio/${audio_name}_music.mp3`;
   audio.play();
 };
 
 const tutorial = () => {
-  show_box(2); // hiện mục hướng dẫn game, register, login
+  show_box(2);
 };
 
 const show_box = (index) => {
-  let box_arr = document.querySelectorAll(".box");
-  // console.log(box_arr);
+  let box_arr = DOM.boxes;
   for (let i = 0; i < box_arr.length; i++) {
     box_arr[i].classList.add("display_none");
   }

@@ -1,10 +1,10 @@
-const varCss = (name, value) => {
+export const varCss = (name, value) => {
   if (name[0] != "-") name = "--" + name;
   if (value) document.documentElement.style.setProperty(name, value);
   return getComputedStyle(document.documentElement).getPropertyValue(name);
 };
 
-const listColor = [
+export const listColor = [
   "firebrick",
   "blue",
   "green",
@@ -18,9 +18,9 @@ const listColor = [
   "olive",
 ];
 
-const getRandomInt = (max) => Math.floor(Math.random() * max);
+export const getRandomInt = (max) => Math.floor(Math.random() * max);
 
-const convertTime = (second) => {
+export const convertTime = (second) => {
   let time = "";
   const h = Math.floor(second / 3600);
   time += h < 10 ? `0${h}` : `${h}`;
@@ -30,5 +30,3 @@ const convertTime = (second) => {
   time += s < 10 ? `:0${s}` : `:${s}`;
   return time;
 };
-
-export { convertTime, getRandomInt, listColor, varCss };
