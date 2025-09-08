@@ -61,6 +61,36 @@ async function bootstrap() {
   app.use("/users", userRoutes());
   app.use("/api/match", matchRoutes());
 
+  // 404 handler
+  app.use((req, res, next) => {
+    res.status(404);
+
+    if (req.originalUrl.startsWith("/api")) {
+      return res.json({ error: "Not Found" });
+    }
+
+    return res.render("pages/404", { title: "Page Not Found" });
+  });
+
+  // error handler
+  app.use((err, req, res, next) => {
+    console.error("Error:", err);
+
+    res.status(err.status || 500);
+
+    if (req.originalUrl.startsWith("/api")) {
+      return res.json({
+        error: err.message || "Internal Server Error",
+      });
+    }
+
+    res.render("pages/error", {
+      title: "Error",
+      message: err.message || "Something went wrong",
+      error: process.env.NODE_ENV === "development" ? err : {},
+    });
+  });
+
   app.listen(config.port, () => {
     console.log(`Server running at http://localhost:${config.port}`);
   });
