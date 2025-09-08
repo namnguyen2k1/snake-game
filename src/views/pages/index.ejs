@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Snake Game</title>
     <link rel="shortcut icon" href="/logo.png" type="image/x-icon" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
 
     <link rel="stylesheet" href="/css/reset_css.min.css" />
     <!-- <link rel="stylesheet" href="/css/bootstrap_grid_5.min.css" /> -->
@@ -57,7 +60,9 @@
             <ul>
               (*) Luật:
               <li>|> Rắn chạm thành -> DIE!</li>
-              <li>|> Khi ăn mồi sẽ có thời gian tiêu hóa, nếu trong thời gian này ăn thêm mồi -> DIE!</li>
+              <li>
+                |> Khi ăn mồi sẽ có thời gian tiêu hóa, nếu trong thời gian này ăn thêm mồi -> DIE!
+              </li>
               <li>|> Ăn phải con rắn khác -> DIE!</li>
               <li>|> Có xác suất xuất hiện mồi đặc biệt</li>
             </ul>
@@ -92,7 +97,12 @@
           </div>
         </div>
         <div class="box loser">
-          <i style="float: right" id="submit_score" onclick="saveScore(this)" class="far fa-save"></i>
+          <i
+            style="float: right"
+            id="submit_score"
+            onclick="saveScore(this)"
+            class="far fa-save"
+          ></i>
           <div class="loser_box">
             <h1>Oh không, bạn đã chết!</h1>
             <span>Player 1.You got 1000 points. Come on, let's play again!!!</span>
@@ -122,7 +132,20 @@
       </div>
     </div>
     <%- include('../partials/footer.ejs') %>
-    <audio id="Audio" class="pause" style="display: none" src="/audio/home_music.mp3" controls loop></audio>
-    <audio id="Audio_bait" class="pause" style="display: none" src="/audio/bait_music.mp3" controls></audio>
+    <audio
+      id="Audio"
+      class="pause"
+      style="display: none"
+      src="/audio/home_music.mp3"
+      controls
+      loop
+    ></audio>
+    <audio
+      id="Audio_bait"
+      class="pause"
+      style="display: none"
+      src="/audio/bait_music.mp3"
+      controls
+    ></audio>
   </body>
 </html>
