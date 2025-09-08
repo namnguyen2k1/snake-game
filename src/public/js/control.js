@@ -1,5 +1,6 @@
-import { game, theme } from "./variable.js";
 import { varCss } from "./handy_component.js";
+import { ICONS } from "./icon.js";
+import { game, theme } from "./variable.js";
 
 let controlTheme = document.getElementById("toggleTheme");
 // thay đổi theme: dark_theme and light_theme
@@ -8,7 +9,7 @@ const change_theme = (stateTheme) => {
   if (game.is_playing) return;
   if (stateTheme === "light") {
     game.theme = "light";
-    controlTheme.innerHTML = '<i class="fas fa-sun"></i>';
+    controlTheme.innerHTML = ICONS.SUN;
     varCss("primary-color", theme.light.primaryColor);
     varCss("secondary-color", theme.light.secondaryColor);
     varCss("bg-color", theme.light.bgColor);
@@ -19,7 +20,7 @@ const change_theme = (stateTheme) => {
   }
   if (stateTheme === "dark") {
     game.theme = "dark";
-    controlTheme.innerHTML = '<i class="fas fa-moon"></i>';
+    controlTheme.innerHTML = ICONS.MOON;
     varCss("primary-color", theme.dark.primaryColor);
     varCss("secondary-color", theme.dark.secondaryColor);
     varCss("bg-color", theme.dark.bgColor);
@@ -32,11 +33,11 @@ const change_theme = (stateTheme) => {
 
 const toggleTheme = (e) => {
   if (e.classList.contains("light")) {
-    e.innerHTML = '<i class="fas fa-moon"></i>';
+    e.innerHTML = ICONS.MOON;
     e.classList.remove("light");
     change_theme("dark");
   } else {
-    e.innerHTML = '<i class="fas fa-sun"></i>';
+    e.innerHTML = ICONS.SUN;
     e.classList.add("light");
     change_theme("light");
   }
@@ -97,32 +98,32 @@ const change_level = (level) => {
   if (game.is_playing) return;
   let level_easy = document.getElementById("easy");
   level_easy.addEventListener("click", () => {
-    document.getElementById("level").innerHTML = '<i class="fas fa-laugh-beam"></i> Easy';
+    document.getElementById("level").innerHTML = `${ICONS.LV_EASY} Easy`;
     game.speedPlay /= 1;
     game.levelPlaying = "easy";
   });
   let level_medium = document.getElementById("medium");
   level_medium.addEventListener("click", () => {
-    document.getElementById("level").innerHTML = '<i class="fas fa-laugh"></i> Medium';
+    document.getElementById("level").innerHTML = `${ICONS.LV_MEDIUM} Medium`;
     game.speedPlay /= 2;
     game.levelPlaying = "medium";
   });
   let level_hard = document.getElementById("hard");
   level_hard.addEventListener("click", () => {
-    document.getElementById("level").innerHTML = '<i class="fas fa-tired"></i> Hard';
+    document.getElementById("level").innerHTML = `${ICONS.LV_HARD} Hard`;
     game.speedPlay /= 2;
     game.levelPlaying = "hard";
   });
   if (theme === "easy") {
-    document.getElementById("level").innerHTML = '<i class="fas fa-laugh-beam"></i> Easy';
+    document.getElementById("level").innerHTML = `${ICONS.LV_EASY} Easy`;
     game.speedPlay /= 1;
     game.levelPlaying = "easy";
   } else if (theme === "medium") {
-    document.getElementById("level").innerHTML = '<i class="fas fa-laugh"></i> Medium';
+    document.getElementById("level").innerHTML = `${ICONS.LV_MEDIUM} Medium`;
     game.speedPlay /= 2;
     game.levelPlaying = "medium";
   } else if (theme === "hard") {
-    document.getElementById("level").innerHTML = '<i class="fas fa-tired"></i> Hard';
+    document.getElementById("level").innerHTML = `${ICONS.LV_HARD} Hard`;
     game.speedPlay /= 3;
     game.levelPlaying = "hard";
   }
@@ -133,27 +134,27 @@ const change_speed = (speed) => {
   if (game.is_playing) return;
   let speedx1 = document.getElementById("speedx1");
   speedx1.addEventListener("click", () => {
-    document.getElementById("speed").innerHTML = '<i class="fas fa-tachometer-alt"></i>Speed x1';
+    document.getElementById("speed").innerHTML = `${ICONS.SPEED}Speed x1`;
     game.speedPlay /= 1;
   });
   let speedx2 = document.getElementById("speedx2");
   speedx2.addEventListener("click", () => {
-    document.getElementById("speed").innerHTML = '<i class="fas fa-tachometer-alt"></i>Speed x2';
+    document.getElementById("speed").innerHTML = `${ICONS.SPEED}Speed x2`;
     game.speedPlay /= 2;
   });
   let speedx3 = document.getElementById("speedx3");
   speedx3.addEventListener("click", () => {
-    document.getElementById("speed").innerHTML = '<i class="fas fa-tachometer-alt"></i>Speed x3';
+    document.getElementById("speed").innerHTML = `${ICONS.SPEED}Speed x3`;
     game.speedPlay /= 3;
   });
   if (speed === 1) {
-    document.getElementById("speed").innerHTML = '<i class="fas fa-tachometer-alt"></i>Speed x1';
+    document.getElementById("speed").innerHTML = `${ICONS.SPEED}Speed x1`;
     game.speedPlay /= 1;
   } else if (speed === 2) {
-    document.getElementById("speed").innerHTML = '<i class="fas fa-tachometer-alt"></i>Speed x2';
+    document.getElementById("speed").innerHTML = `${ICONS.SPEED}Speed x2`;
     game.speedPlay /= 2;
   } else if (speed === 3) {
-    document.getElementById("speed").innerHTML = '<i class="fas fa-tachometer-alt"></i>Speed x3';
+    document.getElementById("speed").innerHTML = `${ICONS.SPEED}Speed x3`;
     game.speedPlay /= 3;
   }
 };
@@ -162,21 +163,19 @@ const change_state_player = (state) => {
   if (game.is_playing) return;
   let state_alone = document.getElementById("state_alone");
   state_alone.addEventListener("click", () => {
-    document.getElementById("player").innerHTML = '<i class="fas fa-user"></i> Player';
+    document.getElementById("player").innerHTML = `${ICONS.USER} Player`;
     game.count_player = 1;
   });
   let state_partner = document.getElementById("state_partner");
   state_partner.addEventListener("click", () => {
-    document.getElementById("player").innerHTML =
-      '<i class="fas fa-user"></i> <i class="fas fa-user"></i> Player';
+    document.getElementById("player").innerHTML = `${ICONS.USER} ${ICONS.USER} Player`;
     game.count_player = 2;
   });
   if (state === 1) {
-    document.getElementById("player").innerHTML = '<i class="fas fa-user"></i> Player';
+    document.getElementById("player").innerHTML = `${ICONS.USER} Player`;
     game.count_player = 1;
   } else if (state === 2) {
-    document.getElementById("player").innerHTML =
-      '<i class="fas fa-user"></i><i class="fas fa-user"></i> Player';
+    document.getElementById("player").innerHTML = `${ICONS.USER}${ICONS.USER} Player`;
     game.count_player = 2;
   }
 };
@@ -189,7 +188,7 @@ let chose_audio = (audio_name) => {
   audio.src = `/audio/${audio_name}_music.mp3`;
   audio.play();
   audio.classList.remove("pause");
-  controlAudio.innerHTML = '<i class="fas fa-volume-up"></i>';
+  controlAudio.innerHTML = ICONS.AUDIO_PLAY;
 };
 
 controlAudio.addEventListener("click", () => {
@@ -197,11 +196,11 @@ controlAudio.addEventListener("click", () => {
   if (audio.classList.contains("pause")) {
     audio.play();
     audio.classList.remove("pause");
-    controlAudio.innerHTML = '<i class="fas fa-volume-up"></i>';
+    controlAudio.innerHTML = ICONS.AUDIO_PLAY;
   } else {
     audio.pause();
     audio.classList.add("pause");
-    controlAudio.innerHTML = '<i class="fas fa-volume-mute"></i>';
+    controlAudio.innerHTML = ICONS.AUDIO_PAUSE;
   }
 });
 
@@ -224,15 +223,13 @@ const show_box = (index) => {
   box_arr[index - 1].classList.remove("display_none");
 };
 
-// each file other file module then can run function in this. it must export to file mudule to run
-
 export {
+  ate_bait,
   change_level,
-  change_theme,
   change_speed,
   change_state_player,
-  tutorial,
-  show_box,
+  change_theme,
   chose_audio,
-  ate_bait,
+  show_box,
+  tutorial,
 };

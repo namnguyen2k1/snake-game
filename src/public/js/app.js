@@ -14,6 +14,7 @@ import {
   show_box,
   tutorial,
 } from "./control.js";
+import { ICONS } from "./icon.js";
 
 //! các biến let, var không thể module hóa được??
 let lenght_snake = []; // mảng chứa độ dài các thân rắn
@@ -577,7 +578,7 @@ let buttonPlay = document.getElementById("play");
 buttonPlay.onclick = () => {
   // play chỉ để start game
   if (buttonPlay.innerText === "Start" && !game.is_playing) {
-    buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause';
+    buttonPlay.innerHTML = `${ICONS.GAME_PAUSE} Pause`;
     game.is_playing = true;
     get_infor_player();
     show_box(1);
@@ -593,7 +594,7 @@ window.onkeydown = (e) => {
   if (key !== SPACE) return;
   // bắt đầu game
   if (buttonPlay.innerText === "Start" && !game.is_playing) {
-    buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause';
+    buttonPlay.innerHTML = `${ICONS.GAME_PAUSE} Pause`;
     game.is_playing = true;
     show_box(1);
     get_infor_player();
@@ -603,18 +604,13 @@ window.onkeydown = (e) => {
     chose_audio("play");
   }
   // đang chơi muốn dừng lai
-  else if (
-    (buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause' && game.is_playing)
-  ) {
-    buttonPlay.innerHTML = '<i class="fas fa-caret-square-right"></i> Continue';
+  else if (buttonPlay.innerHTML == `${ICONS.GAME_PAUSE} Pause` && game.is_playing) {
+    buttonPlay.innerHTML = `${ICONS.GAME_PLAY} Continue`;
     game.is_playing = false;
   }
   // đang dừng muốn chơi lại
-  else if (
-    (buttonPlay.innerHTML =
-      '<i class="fas fa-caret-square-right"></i> Continue' && !game.is_playing)
-  ) {
-    buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause';
+  else if (buttonPlay.innerHTML == `${ICONS.GAME_PLAY} Continue` && !game.is_playing) {
+    buttonPlay.innerHTML = `${ICONS.GAME_PAUSE} Pause`;
     game.is_playing = true;
     requestAnimationFrame(play); // load tiep animation
   }
@@ -636,7 +632,7 @@ let restart_game = document.querySelectorAll(".restart_game");
 restart_game.forEach((element) => {
   element.addEventListener("click", () => {
     show_box(1);
-    buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause';
+    buttonPlay.innerHTML = `${ICONS.GAME_PAUSE} Pause`;
     game.is_playing = true;
     get_infor_player();
     initGame();
@@ -649,7 +645,7 @@ restart_game.forEach((element) => {
 
 play_game.addEventListener("click", () => {
   show_box(1);
-  buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause';
+  buttonPlay.innerHTML = `${ICONS.GAME_PAUSE} Pause`;
   game.is_playing = true;
   get_infor_player();
   initGame();
