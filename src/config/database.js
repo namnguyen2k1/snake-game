@@ -1,6 +1,6 @@
 import mongoose, { connect } from 'mongoose';
 
-export const connectDB = async () => {
+export const connectDatabase = async () => {
   try {
     const dbName = 'snake-game';
     const uri = `mongodb://localhost:27017/${dbName}`;
@@ -13,4 +13,9 @@ export const connectDB = async () => {
     console.error('MongoDB connection error:', err.message);
     process.exit(1);
   }
+};
+
+export const DB_COLLECTION = {
+  USER: 'users',
+  MATCH: 'matches'
 };

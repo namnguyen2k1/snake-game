@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { DB_COLLECTION } from '../config/database.js';
 
 const UserSchema = new Schema(
   {
@@ -24,4 +25,4 @@ const UserSchema = new Schema(
   }
 );
 
-export const User = model('users', UserSchema);
+export const UserModel = model(DB_COLLECTION.USER, UserSchema);

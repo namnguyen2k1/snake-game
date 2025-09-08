@@ -5,37 +5,24 @@ export async function read(req, res) {
 }
 
 export async function createMatch(req, res) {
-  try {
-    const match = await matchService.createMatchService(req.body);
-    res.status(201).send({ message: 'Match saved successfully!', match });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ message: 'Failed to save match' });
-  }
+  const match = await matchService.createMatch(req.body);
+  res.status(201).send({ message: 'Match saved successfully!', match });
 }
 
-export async function getMatch(req, res) {
-  try {
-    const matches = await matchService.getMatchByAuthorService(req.body.name);
-    if (!matches || matches.length === 0) {
-      return res.status(404).send({ message: 'No match found' });
-    }
-    res.send({ matches });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ message: 'Error fetching matches' });
+export async function getMatchByAuthor(req, res) {
+  const matches = await matchService.getMatchByUsername(req.body.name);
+  console.log('match by', req.body, matches);
+  if (!matches || matches.length === 0) {
+    return res.status(404).send({ message: 'No match found' });
   }
+  res.send({ matches });
 }
 
 export async function getAllMatches(req, res) {
-  try {
-    const matches = await matchService.getAllMatchesService();
-    if (!matches || matches.length === 0) {
-      return res.status(404).send({ message: 'No matches found' });
-    }
-    res.send({ matches });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ message: 'Error fetching all matches' });
+  const matches = await matchService.getAllMatches();
+  console.log('matches', matches);
+  if (!matches || matches.length === 0) {
+    return res.status(404).send({ message: 'No matches found' });
   }
+  res.send({ matches });
 }

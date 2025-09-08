@@ -1,18 +1,18 @@
 //todo _Thêm các hàm tiện tích hay dùng
-import { varCss, listColor, getRandomInt, convertTime } from './handy_component.js';
+import { convertTime, getRandomInt, listColor, varCss } from './handy_component.js';
 
 //todo _Thêm các biến, object game
-import { game, dot_snake, bait, key, SPACE, ESC, ERROR, player, coefficient } from './variable.js';
+import { bait, coefficient, dot_snake, ERROR, ESC, game, key, player, SPACE } from './variable.js';
 //todo _Thêm các hàm điều khiển game
 import {
+  ate_bait,
   change_level,
-  change_theme,
   change_speed,
   change_state_player,
-  tutorial,
-  show_box,
+  change_theme,
   chose_audio,
-  ate_bait
+  show_box,
+  tutorial
 } from './control.js';
 
 //! các biến let, var không thể module hóa được??
@@ -298,10 +298,7 @@ const collision_other_snake = current_snake => {
     if (i !== current_snake) {
       for (let j = 0; j < lenght_snake[i].current; j++) {
         //! nếu tọa độ head_current_snake == với các dot_snake khác -> lose()
-        if (
-          snake[current_snake][0].x === snake[i][j].x &&
-          snake[current_snake][0].y === snake[i][j].y
-        ) {
+        if (snake[current_snake][0].x === snake[i][j].x && snake[current_snake][0].y === snake[i][j].y) {
           return true; // trả về đụng độ
         }
       }
@@ -333,12 +330,7 @@ const keyInput = e => {
 // phân nhóm key_input
 const partition = input => {
   for (let i = 0; i < game.count_player; i++) {
-    if (
-      input === key[i].left ||
-      input === key[i].right ||
-      input === key[i].up ||
-      input === key[i].down
-    ) {
+    if (input === key[i].left || input === key[i].right || input === key[i].up || input === key[i].down) {
       return i + 1; // trả về nhóm key-code player
     }
     // nếu key đầu vào thuộc nhóm đặc biệt
@@ -422,9 +414,7 @@ const lose = lose_player => {
       }
       let item = document.createElement('h2');
       item.classList.add('lose_player');
-      item.innerText = `Player ${i + 1}.You got ${
-        player.score[i]
-      } points. Come on, let's play again!!!`;
+      item.innerText = `Player ${i + 1}.You got ${player.score[i]} points. Come on, let's play again!!!`;
       loser_box.appendChild(item);
     }
   }
@@ -605,17 +595,12 @@ window.onkeydown = e => {
     chose_audio('play');
   }
   // đang chơi muốn dừng lai
-  else if (
-    (buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause' && game.is_playing)
-  ) {
+  else if ((buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause' && game.is_playing)) {
     buttonPlay.innerHTML = '<i class="fas fa-caret-square-right"></i> Continue';
     game.is_playing = false;
   }
   // đang dừng muốn chơi lại
-  else if (
-    (buttonPlay.innerHTML =
-      '<i class="fas fa-caret-square-right"></i> Continue' && !game.is_playing)
-  ) {
+  else if ((buttonPlay.innerHTML = '<i class="fas fa-caret-square-right"></i> Continue' && !game.is_playing)) {
     buttonPlay.innerHTML = '<i class="fas fa-pause-circle"></i> Pause';
     game.is_playing = true;
     requestAnimationFrame(play); // load tiep animation
@@ -703,19 +688,19 @@ const getAllMatch = async () => {
     body: JSON.stringify(option)
   };
   let box = document.querySelector('.match-server');
-  let matchs = '';
+  let matches = '';
 
   await fetch('/api/match/all', fetchOptions)
     .then(res => {
       return res.json();
     })
     .then(data => {
-      console.log(data.matchs);
-      for (let match of data.matchs) {
-        matchs += `
+      console.log(data.matches);
+      for (let match of data.matches) {
+        matches += `
                <tr class="history_item">
                   <td>${match.date}</td>
-                  <td>${match.author}</td>
+                  <td>${match.name}</td>
                   <td>${match.score}</td>
                   <td>${match.time}</td>
                </tr>
@@ -723,7 +708,7 @@ const getAllMatch = async () => {
       }
     })
     .catch(console.error());
-  box.innerHTML = matchs;
+  box.innerHTML = matches;
 };
 
 const view_infor_player = document.getElementById('view_infor_player');

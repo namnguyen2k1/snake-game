@@ -1,7 +1,7 @@
 import { Strategy } from 'passport-local';
 import * as userService from '../services/user.service.js';
 
-export default function (passport) {
+export function configurationPassport(passport) {
   passport.use(
     new Strategy({ usernameField: 'email' }, async (email, password, done) => {
       try {

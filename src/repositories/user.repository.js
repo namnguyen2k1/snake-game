@@ -1,16 +1,16 @@
-import { User } from '../models/user.model.js';
+import { UserModel } from '../models/user.model.js';
 
-export async function createUser(newUser) {
-  const user = new User(newUser);
+export async function createUser(payload) {
+  const user = new UserModel(payload);
   return await user.save();
 }
 
 export async function getUserByEmail(email) {
-  return await User.findOne({ email }).exec();
+  return await UserModel.findOne({ email }).exec();
 }
 
 export async function getUserById(id) {
-  return await User.findById(id).exec();
+  return await UserModel.findById(id).exec();
 }
 
 export async function comparePassword(password, hash) {

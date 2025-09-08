@@ -6,6 +6,7 @@
    "type": "module",
    "scripts": {
       "watch": "sass --watch src/resources/scss:src/public/css",
+      "format": "prettier --write .",
       "start": "nodemon src/server.js"
    },
    "dependencies": {
@@ -31,7 +32,8 @@
       "babel-cli": "^6.26.0",
       "babel-preset-es2015": "^6.24.1",
       "babel-preset-stage-0": "^6.24.1",
-      "nodemon": "^3.1.10"
+      "nodemon": "^3.1.10",
+      "prettier": "^3.6.2"
    },
    "license": "MIT"
 }

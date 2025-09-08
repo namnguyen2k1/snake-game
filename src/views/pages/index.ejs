@@ -1,154 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Snake Game</title>
-      <link rel="shortcut icon" href="/logo.png" type="image/x-icon" />
-      <link
-         rel="stylesheet"
-         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
-      />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake Game</title>
+    <link rel="shortcut icon" href="/logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
 
-      <link rel="stylesheet" href="/css/reset_css.min.css" />
-      <!-- <link rel="stylesheet" href="/css/bootstrap_grid_5.min.css" /> -->
-      <link rel="stylesheet" href="/css/atomic_class.min.css" />
-      <link rel="stylesheet" href="/css/style.css" />
-      <script type="module" src="/js/app.js" defer></script>
-   </head>
-   <body>
-      <div class="navbar">
-         <div id="title_game" class="nav__item" title="Game logo">Snakee</div>
-         <div id="toggleTheme" class="nav__item light" title="Change theme">
-            <i class="fas fa-sun"></i>
-         </div>
-         <div class="nav__item" id="control_audio" title="Play/Pause music">
-            <i class="fas fa-volume-mute"></i>
-         </div>
-         <div class="nav__item" id="view_infor_player" title="View history match">
-            <i class="fas fa-user" style="margin-right: 0.5rem"></i>
-            <i id="username-local"> <%= user.name %></i>
-         </div>
-         <a href="/users/logout" class="nav__item" title="Log Out">
-            <i class="fas fa-sign-out-alt"></i>
-         </a>
+    <link rel="stylesheet" href="/css/reset_css.min.css" />
+    <!-- <link rel="stylesheet" href="/css/bootstrap_grid_5.min.css" /> -->
+    <link rel="stylesheet" href="/css/atomic_class.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <script type="module" src="/js/app.js" defer></script>
+  </head>
+  <body>
+    <div class="navbar">
+      <div id="title_game" class="nav__item" title="Game logo">Snakee</div>
+      <div id="toggleTheme" class="nav__item light" title="Change theme">
+        <i class="fas fa-sun"></i>
       </div>
-      <%- include('../partials/rank_component.ejs') %>
-      <div class="main__container">
-         <%- include('../partials/control_component.ejs') %>
-         <div class="play__board">
-            <div class="infor__container">
-               <div class="infor score" id="score_player_1">Player 1: 0</div>
-               <div class="infor" id="time_play">00:00:00</div>
-               <div class="infor score" id="score_player_2"></div>
-            </div>
-            <canvas class="box" id="Canvas" width="640px" height="420px"> </canvas>
-            <ul class="box tutorial_box">
-               <li>(*) Cấp độ: Khó, Trung Bình, Dễ.</li>
-               <li>(*) Tốc độ: 1xspeed, 2xspeed, 3xspeed</li>
-               <li>(*) Giao diện: Dark và Light</li>
-               <li>
-                  <ul>
-                     (*) Điều khiển:
-                     <li>|>1_player: 1.arrow (top, right, bottom, left)</li>
-                     <li>
-                        |>2_player: 1.arrow (top, right, bottom, left) 2.combo key (w, d, s, a)
-                     </li>
-                  </ul>
-               </li>
-               <li>(*) START/PAUSE/CONTINUE: Space</li>
-               <li>(*) Xếp hạng: Easy_board, Medium_board, Hard_board.</li>
-               <li>
-                  <ul>
-                     (*) Luật:
-                     <li>|> Rắn chạm thành -> DIE!</li>
-                     <li>
-                        |> Khi ăn mồi sẽ có thời gian tiêu hóa, nếu trong thời gian này ăn thêm mồi
-                        -> DIE!
-                     </li>
-                     <li>|> Ăn phải con rắn khác -> DIE!</li>
-                     <li>|> Có xác suất xuất hiện mồi đặc biệt</li>
-                  </ul>
-               </li>
-               <li>(*) Download Image: Space -> Right_Click -> Save Image</li>
-               <li class="start_box">
-                  <a class="start_item" id="play_game">Play Game</a>
-               </li>
+      <div class="nav__item" id="control_audio" title="Play/Pause music">
+        <i class="fas fa-volume-mute"></i>
+      </div>
+      <div class="nav__item" id="view_infor_player" title="View history match">
+        <i class="fas fa-user" style="margin-right: 0.5rem"></i>
+        <i id="username-local"> <%= user.name %></i>
+      </div>
+      <a href="/users/logout" class="nav__item" title="Log Out">
+        <i class="fas fa-sign-out-alt"></i>
+      </a>
+    </div>
+    <%- include('../partials/rank_component.ejs') %>
+    <div class="main__container">
+      <%- include('../partials/control_component.ejs') %>
+      <div class="play__board">
+        <div class="infor__container">
+          <div class="infor score" id="score_player_1">Player 1: 0</div>
+          <div class="infor" id="time_play">00:00:00</div>
+          <div class="infor score" id="score_player_2"></div>
+        </div>
+        <canvas class="box" id="Canvas" width="640px" height="420px"> </canvas>
+        <ul class="box tutorial_box">
+          <li>(*) Cấp độ: Khó, Trung Bình, Dễ.</li>
+          <li>(*) Tốc độ: 1xspeed, 2xspeed, 3xspeed</li>
+          <li>(*) Giao diện: Dark và Light</li>
+          <li>
+            <ul>
+              (*) Điều khiển:
+              <li>|>1_player: 1.arrow (top, right, bottom, left)</li>
+              <li>|>2_player: 1.arrow (top, right, bottom, left) 2.combo key (w, d, s, a)</li>
             </ul>
-            <div class="box infor_current_player">
-               <div class="main_infor_player">
-                  <div class="avatar">
-                     <img src="http://localhost:3000/avatar/avatar_template.png" alt="" />
-                  </div>
-                  <div class="name"><i class="fas fa-user-tie"></i> <%= user.name %></div>
-                  <div class="email"><i class="fas fa-envelope"></i> <%= user.email %></div>
-                  <div class="something">No pain no gain! <i class="fas fa-feather-alt"></i></div>
-               </div>
-               <div class="history_box">
-                  <div class="title">All User</div>
-                  <table>
-                     <thead>
-                        <tr class="history_item heading">
-                           <td>Date</td>
-                           <td>User</td>
-                           <td>Score</td>
-                           <td>Time Play</td>
-                        </tr>
-                     </thead>
-                     <tbody class="match-server"></tbody>
-                  </table>
-               </div>
+          </li>
+          <li>(*) START/PAUSE/CONTINUE: Space</li>
+          <li>(*) Xếp hạng: Easy_board, Medium_board, Hard_board.</li>
+          <li>
+            <ul>
+              (*) Luật:
+              <li>|> Rắn chạm thành -> DIE!</li>
+              <li>|> Khi ăn mồi sẽ có thời gian tiêu hóa, nếu trong thời gian này ăn thêm mồi -> DIE!</li>
+              <li>|> Ăn phải con rắn khác -> DIE!</li>
+              <li>|> Có xác suất xuất hiện mồi đặc biệt</li>
+            </ul>
+          </li>
+          <li>(*) Download Image: Space -> Right_Click -> Save Image</li>
+          <li class="start_box">
+            <a class="start_item" id="play_game">Play Game</a>
+          </li>
+        </ul>
+        <div class="box infor_current_player">
+          <div class="main_infor_player">
+            <div class="avatar">
+              <img src="http://localhost:3000/avatar/avatar_template.png" alt="" />
             </div>
-            <div class="box loser">
-               <i
-                  style="float: right"
-                  id="submit_score"
-                  onclick="saveScore(this)"
-                  class="far fa-save"
-               ></i>
-               <div class="loser_box">
-                  <h1>Oh không, bạn đã chết!</h1>
-                  <span>Player 1.You got 1000 points. Come on, let's play again!!!</span>
-               </div>
-               <li class="start_box">
-                  <a class="start_item view_history">View History </a>
-                  <a class="start_item restart_game">Restart</a>
-               </li>
-            </div>
-            <div class="box history_match">
-               <div class="history name">History Local</div>
-               <table class="history_box">
-                  <thead>
-                     <tr class="history_item heading">
-                        <td>Match</td>
-                        <td>Date</td>
-                        <td>Score</td>
-                        <td>Time Play</td>
-                     </tr>
-                  </thead>
-                  <tbody class="match-local"></tbody>
-               </table>
-               <div class="start_box">
-                  <a class="start_item restart_game">Restart</a>
-               </div>
-            </div>
-         </div>
+            <div class="name"><i class="fas fa-user-tie"></i> <%= user.name %></div>
+            <div class="email"><i class="fas fa-envelope"></i> <%= user.email %></div>
+            <div class="something">No pain no gain! <i class="fas fa-feather-alt"></i></div>
+          </div>
+          <div class="history_box">
+            <div class="title">All User</div>
+            <table>
+              <thead>
+                <tr class="history_item heading">
+                  <td>Date</td>
+                  <td>User</td>
+                  <td>Score</td>
+                  <td>Time Play</td>
+                </tr>
+              </thead>
+              <tbody class="match-server"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="box loser">
+          <i style="float: right" id="submit_score" onclick="saveScore(this)" class="far fa-save"></i>
+          <div class="loser_box">
+            <h1>Oh không, bạn đã chết!</h1>
+            <span>Player 1.You got 1000 points. Come on, let's play again!!!</span>
+          </div>
+          <li class="start_box">
+            <a class="start_item view_history">View History </a>
+            <a class="start_item restart_game">Restart</a>
+          </li>
+        </div>
+        <div class="box history_match">
+          <div class="history name">History Local</div>
+          <table class="history_box">
+            <thead>
+              <tr class="history_item heading">
+                <td>Match</td>
+                <td>Date</td>
+                <td>Score</td>
+                <td>Time Play</td>
+              </tr>
+            </thead>
+            <tbody class="match-local"></tbody>
+          </table>
+          <div class="start_box">
+            <a class="start_item restart_game">Restart</a>
+          </div>
+        </div>
       </div>
-      <%- include('../partials/footer.ejs') %>
-      <audio
-         id="Audio"
-         class="pause"
-         style="display: none"
-         src="/audio/home_music.mp3"
-         controls
-         loop
-      ></audio>
-      <audio
-         id="Audio_bait"
-         class="pause"
-         style="display: none"
-         src="/audio/bait_music.mp3"
-         controls
-      ></audio>
-   </body>
+    </div>
+    <%- include('../partials/footer.ejs') %>
+    <audio id="Audio" class="pause" style="display: none" src="/audio/home_music.mp3" controls loop></audio>
+    <audio id="Audio_bait" class="pause" style="display: none" src="/audio/bait_music.mp3" controls></audio>
+  </body>
 </html>

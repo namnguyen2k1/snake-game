@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator';
 import passport from 'passport';
-import { User } from '../models/user.model.js';
+import { UserModel } from '../models/user.model.js';
 import { registerUser } from '../services/user.service.js';
 
 export function loginForm(req, res) {
@@ -29,25 +29,19 @@ export async function register(req, res) {
     return res.render('pages/register', { errors: errors.array() });
   }
 
-  try {
-    const { name, email, password } = req.body;
-    const user = new User({
-      name,
-      email,
-      password
-    });
+  const { name, email, password } = req.body;
+  const user = new UserModel({
+    name,
+    email,
+    password
+  });
 
-    console.log('auth controller', user);
+  console.log('auth controller', user);
 
-    await registerUser(user);
+  await registerUser(user);
 
-    req.flash('success_message', 'You have registered, now please login');
-    res.redirect('login');
-  } catch (err) {
-    console.error(err);
-    req.flash('error_message', 'Registration failed');
-    res.redirect('register');
-  }
+  req.flash('success_message', 'You have registered, now please login');
+  res.redirect('login');
 }
 
 export function logout(req, res, next) {

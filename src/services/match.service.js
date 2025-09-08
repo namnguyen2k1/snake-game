@@ -1,13 +1,13 @@
 import * as matchRepo from '../repositories/match.repository.js';
 
-export async function createMatchService({ author, date, score, time }) {
-  return await matchRepo.createMatch({ author, date, score, time });
+export async function createMatch({ name, date, score, time }) {
+  return await matchRepo.createMatch({ name, date, score, time });
 }
 
-export async function getMatchByAuthorService(author) {
-  return await matchRepo.findMatchByAuthor(author);
+export async function getMatchByUsername(name) {
+  return await matchRepo.findMatchByAuthor(name);
 }
 
-export async function getAllMatchesService() {
+export async function getAllMatches() {
   return await matchRepo.findAllMatches();
 }
