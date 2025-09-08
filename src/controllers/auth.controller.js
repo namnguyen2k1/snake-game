@@ -8,12 +8,10 @@ export function loginForm(req, res) {
 }
 
 export function login(req, res, next) {
-  console.log("login auth controller");
   passport.authenticate("local", {
     failureRedirect: "/users/login",
     failureFlash: true,
   })(req, res, () => {
-    console.log("login passport authenticate", req.user);
     req.flash("success_message", "You are now Logged in!!");
     res.redirect("/");
   });
@@ -36,8 +34,6 @@ export async function register(req, res) {
     password,
   });
 
-  console.log("auth controller", user);
-
   await registerUser(user);
 
   req.flash("success_message", "You have registered, now please login");
@@ -49,7 +45,6 @@ export function logout(req, res, next) {
     if (err) {
       return next(err);
     }
-    console.log("logout");
     req.flash("success_message", "You are logged out");
     res.redirect("/users/login");
   });

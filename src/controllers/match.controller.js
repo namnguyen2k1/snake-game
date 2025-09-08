@@ -11,7 +11,6 @@ export async function createMatch(req, res) {
 
 export async function getMatchByAuthor(req, res) {
   const matches = await matchService.getMatchByUsername(req.body.name);
-  console.log("match by", req.body, matches);
   if (!matches || matches.length === 0) {
     return res.status(404).send({ message: "No match found" });
   }
@@ -20,7 +19,6 @@ export async function getMatchByAuthor(req, res) {
 
 export async function getAllMatches(req, res) {
   const matches = await matchService.getAllMatches();
-  console.log("matches", matches);
   if (!matches || matches.length === 0) {
     return res.status(404).send({ message: "No matches found" });
   }
