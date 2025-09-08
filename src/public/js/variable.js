@@ -1,0 +1,151 @@
+const game = {
+  width: 240, // chiều dài của game_board
+  height: 100, // chiều dọc của game_board
+  count_player: 1, // số lượng rắn
+  speedPlay: 1, // hệ tốc độ di chuyển của các con rắn
+  levelPlaying: 'easy', // cấp độ chơi
+  is_playing: false, // trạng thái game có đang start hay không?
+  is_find_bait: [], // rắn đang ở trạng thái tìm mồi
+  is_digesting: [], // trạng thái tiêu hóa của các snake
+  wait_digesting: [], // thời gian chờ tiêu hỏa của từng snake
+  theme: ''
+};
+
+// thông số từng dot trong snake
+const dot_snake = {
+  x: 20, // tọa độ 0x
+  y: 20, // tọa độ oy
+  radius: 10,
+  score: 10,
+  color: 'green', // color mồi
+  head: false
+};
+
+// các thông số liên quan đến mồi
+const bait = {
+  x: 50, // tọa độ 0x
+  y: 20, // tọa độ oy
+  radius: 10, // bán kính mồi
+  coefficient: 1, // hệ số ăn mồi
+  color: 'red' // color mồi
+};
+
+// hệ sô zoom snake
+let coefficient = {
+  last: 0,
+  current: 0
+};
+
+// thiết lập bộ key cho từng player
+const key = [
+  {
+    // key-code player_1 (các phím mũi tên)
+    left: 37,
+    right: 39,
+    up: 38,
+    down: 40
+  },
+  {
+    // key-code player_2 (các phím a, d, w, s)
+    left: 65,
+    right: 68,
+    up: 87,
+    down: 83
+  }
+  // ! thêm các bộ key-code mới nếu có cho 3, 4 player
+];
+// Other key-code
+const SPACE = 32;
+const ESC = 27;
+const ERROR = -1000;
+
+const player = {
+  name: [],
+  address: [],
+  score: [],
+  time_play: [],
+  day_play: []
+};
+
+const theme = {
+  dark: {
+    primaryColor: '#325b97',
+    secondaryColor: '#000013',
+    fontColor: '#e1e1ff',
+    bgColor: '#000013',
+    headingColor: '#818cab'
+  },
+  light: {
+    primaryColor: '#d9eee1',
+    secondaryColor: '#d9eee1',
+    fontColor: 'black',
+    bgColor: '#218c74',
+    headingColor: '#064e48'
+  }
+};
+
+export { game, dot_snake, bait, key, SPACE, ESC, ERROR, player, theme, coefficient };
+
+//! bug: cho bất cứ biến let nào vào thì đều không thể export được???
+
+const varCSS = (name, value) => {
+  //get/set css variable
+  if (name[0] != '-') name = '--' + name;
+  if (value) document.documentElement.style.setProperty(name, value);
+  return getComputedStyle(document.documentElement).getPropertyValue(name);
+};
+
+/**
+ * bgColor: color background
+ * fontColor: color text
+ * primaryColor: color text, bg
+ * secondaryColor: color text, bg II
+ * headingColor: color text primary (ex: heading, main_title)
+ */
+
+// function change_theme(theme_name) {
+//    if (theme_name === 'dark') {
+//       varCSS('primary-color', theme.dark.primaryColor);
+//       varCSS('secondary-color', theme.dark.secondaryColor);
+//       varCSS('bg-color', theme.dark.bgColor);
+//       varCSS('heading-color', theme.dark.headingColor);
+//       varCSS('font-color', theme.dark.fontColor);
+//    } else if (theme_name === 'light') {
+//       varCSS('primary-color', theme.light.primaryColor);
+//       varCSS('secondary-color', theme.light.secondaryColor);
+//       varCSS('bg-color', theme.light.bgColor);
+//       varCSS('heading-color', theme.light.headingColor);
+//       varCSS('font-color', theme.light.fontColor);
+//    }
+// }
+
+// function toggleTheme(e) {
+//    // console.log('toggle');
+//    if (e.classList.contains('light')) {
+//       e.innerHTML = '<i class="fas fa-moon"></i>';
+//       e.classList.remove('light');
+//       change_theme('dark');
+//    } else {
+//       e.innerHTML = '<i class="fas fa-sun"></i>';
+//       e.classList.add('light');
+//       change_theme('light');
+//    }
+// }
+
+// // setdefaut theme
+// // change_theme('dark');
+
+// /**
+//   *? In root file css import some variable (custom)
+//    :root {
+//       --primary-color: #0d0b52;
+//       --secondary-color: #3458b9;
+//       --font-color: #424242;
+//       --bg-color: #ffffff;
+//       --heading-color: #292922;
+//    }
+//   *? In button control theme import
+//    <span class="light" onclick="toggleTheme(this)">
+//       <i class="fas fa-sun"></i>
+//    </span>
+// */
