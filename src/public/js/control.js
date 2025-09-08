@@ -4,7 +4,7 @@ import { ICONS } from "./icon.js";
 import { varCss } from "./utils.js";
 import { game, theme } from "./variable.js";
 
-const change_theme = (stateTheme) => {
+export const changeTheme = (stateTheme) => {
   if (game.is_playing) return;
   const applyTheme = (themeKey, icon, addClass, removeClass) => {
     game.theme = themeKey;
@@ -30,15 +30,15 @@ DOM.toggleThemeEl.addEventListener("click", () => {
   if (isLight) {
     DOM.toggleThemeEl.innerHTML = ICONS.MOON;
     DOM.toggleThemeEl.classList.remove("light");
-    change_theme("dark");
+    changeTheme("dark");
   } else {
     DOM.toggleThemeEl.innerHTML = ICONS.SUN;
     DOM.toggleThemeEl.classList.add("light");
-    change_theme("light");
+    changeTheme("light");
   }
 });
 
-const saveScore = async (e) => {
+export const saveScore = async (e) => {
   const match = JSON.parse(localStorage["match"]) || "no match";
   e.classList.remove("far");
   e.classList.add("fas");
@@ -53,7 +53,8 @@ let index = 1;
 DOM.submitScoreEl.addEventListener("click", () => {
   if (index === 1) saveScore(DOM.submitScoreEl);
 });
-const change_level = (level) => {
+
+export const changeLevel = (level) => {
   if (game.is_playing) return;
   const updateLevel = (key, icon, speedFactor) => {
     DOM.levelDisplayEl.innerHTML = `${icon} ${key.charAt(0).toUpperCase() + key.slice(1)}`;
@@ -77,7 +78,7 @@ const change_level = (level) => {
   }
 };
 
-const change_speed = (speed) => {
+export const changeSpeed = (speed) => {
   if (game.is_playing) return;
   const updateSpeed = (multiplier) => {
     DOM.speedDisplayEl.innerHTML = `${ICONS.SPEED}Speed x${multiplier}`;
@@ -94,7 +95,7 @@ const change_speed = (speed) => {
   }
 };
 
-const change_state_player = (state) => {
+export const changeStatePlayer = (state) => {
   if (game.is_playing) return;
   const updateState = (count) => {
     const icons = count === 1 ? `${ICONS.USER}` : `${ICONS.USER} ${ICONS.USER}`;
@@ -114,7 +115,7 @@ const change_state_player = (state) => {
   }
 };
 
-let chose_audio = (audio_name) => {
+export const choseAudio = (audio_name) => {
   let audio = document.getElementById("Audio");
   audio.src = `/audio/${audio_name}_music.mp3`;
   audio.play();
@@ -135,31 +136,20 @@ DOM.controlAudioEl.addEventListener("click", () => {
   }
 });
 
-const ate_bait = (audio_name) => {
+export const ateBait = (audio_name) => {
   let audio = DOM.audioBaitEl;
   audio.src = `/audio/${audio_name}_music.mp3`;
   audio.play();
 };
 
-const tutorial = () => {
-  show_box(2);
+export const tutorial = () => {
+  showBox(2);
 };
 
-const show_box = (index) => {
-  let box_arr = DOM.boxes;
-  for (let i = 0; i < box_arr.length; i++) {
-    box_arr[i].classList.add("display_none");
+export const showBox = (index) => {
+  let boxes = DOM.boxes;
+  for (let i = 0; i < boxes.length; i++) {
+    boxes[i].classList.add("display_none");
   }
-  box_arr[index - 1].classList.remove("display_none");
-};
-
-export {
-  ate_bait,
-  change_level,
-  change_speed,
-  change_state_player,
-  change_theme,
-  chose_audio,
-  show_box,
-  tutorial,
+  boxes[index - 1].classList.remove("display_none");
 };

@@ -6,13 +6,13 @@ import { bait, coefficient, dot_snake, ERROR, ESC, game, key, player, SPACE } fr
 //todo _Thêm các hàm điều khiển game
 import { callApiGetMatchHistory } from "./api.js";
 import {
-  ate_bait,
-  change_level,
-  change_speed,
-  change_state_player,
-  change_theme,
-  chose_audio,
-  show_box,
+  ateBait,
+  changeLevel,
+  changeSpeed,
+  changeStatePlayer,
+  changeTheme,
+  choseAudio,
+  showBox,
   tutorial,
 } from "./control.js";
 import { ICONS } from "./icon.js";
@@ -244,9 +244,9 @@ const updateScore = (i, fa = false) => {
 // đung độ snake thứ i và bait
 const collisionBait = (i) => {
   if (bait.radius === 30) {
-    ate_bait("bait_special");
+    ateBait("bait_special");
   } else {
-    ate_bait("bait");
+    ateBait("bait");
   }
 
   // cập nhập thời gian tiêu hóa
@@ -280,7 +280,7 @@ const collisionBait = (i) => {
   updateSnake(i); // cập nhập thêm dot cho snake i
 };
 
-const collision_wall = (current_snake) => {
+const collisionWall = (current_snake) => {
   // head_snake collision_wall -> lose()
   if (
     snake[current_snake][0].x <= 0 || // đựng thành trên
@@ -293,7 +293,7 @@ const collision_wall = (current_snake) => {
   return false;
 };
 
-const collision_other_snake = (current_snake) => {
+const collisionOtherSnake = (current_snake) => {
   if (current_snake === 0) return false;
   for (let i = 0; i < game.count_player; i++) {
     // so sánh trên data của các snake khác
@@ -366,8 +366,8 @@ const keyValid = (last_key, new_key) => {
   return new_key;
 };
 
-// get infor
-const get_infor_player = () => {
+// get info
+const getInfoPlayer = () => {
   const day = new Date().toLocaleString();
   // const day_infor = `${day.getDay()}:${day.getMonth()}:${day.getFullYear()}`;
   for (let i = 0; i < game.count_player; i++) {
@@ -394,10 +394,10 @@ const lose = (lose_player) => {
   let loser_box = document.querySelector(".loser_box");
   //reset match
   loser_box.innerHTML = "<h1>Oh không, bạn đã chết!</h1>";
-  chose_audio("lose");
+  choseAudio("lose");
   document.getElementById("play").innerHTML = "Start";
   if (game.count_player === 1) {
-    show_box(4);
+    showBox(4);
     // console.log(player.score[0], player.score[1]);
     let item = document.createElement("h2");
     item.classList.add("lose_player");
@@ -412,7 +412,7 @@ const lose = (lose_player) => {
     initGame();
     console.log(history_match);
   } else if (game.count_player === 2) {
-    show_box(4);
+    showBox(4);
     let win_player = 0;
     for (let i = 0; i < game.count_player; i++) {
       // add data to history
@@ -551,13 +551,13 @@ const play = () => {
       }
     }
     // xử lý collsion: wall and other Snake
-    if (collision_wall(i)) {
+    if (collisionWall(i)) {
       game.is_playing = false;
       // truyen vao player_lose
       lose(i + 1); //! đụng wall -> die
       // document.location.reload();
     }
-    if (collision_other_snake(i)) {
+    if (collisionOtherSnake(i)) {
       game.is_playing = false;
       // truyen vao player_lose
       lose(i + 1); //! đụng snake khac -> die
@@ -581,11 +581,11 @@ buttonPlay.onclick = () => {
   if (buttonPlay.innerText === "Start" && !game.is_playing) {
     buttonPlay.innerHTML = `${ICONS.GAME_PAUSE} Pause`;
     game.is_playing = true;
-    get_infor_player();
-    show_box(1);
+    getInfoPlayer();
+    showBox(1);
     initGame();
     play();
-    chose_audio("play");
+    choseAudio("play");
   }
 };
 
@@ -597,12 +597,12 @@ window.onkeydown = (e) => {
   if (buttonPlay.innerText === "Start" && !game.is_playing) {
     buttonPlay.innerHTML = `${ICONS.GAME_PAUSE} Pause`;
     game.is_playing = true;
-    show_box(1);
-    get_infor_player();
+    showBox(1);
+    getInfoPlayer();
     initGame();
     time = setInterval(handleTime, 1000);
     play();
-    chose_audio("play");
+    choseAudio("play");
   }
   // đang chơi muốn dừng lai
   else if (buttonPlay.innerHTML == `${ICONS.GAME_PAUSE} Pause` && game.is_playing) {
@@ -619,7 +619,7 @@ window.onkeydown = (e) => {
 
 //todo thêm sự kiện cho các nút bấm:
 /**
- * show_box(n):
+ * showBox(n):
  *    ->n = 1: canvas game board
  *    ->n = 2: tutorial, register, login board
  *    ->n = 3: infor board
@@ -632,30 +632,30 @@ let play_game = document.getElementById("play_game");
 let restart_game = document.querySelectorAll(".restart_game");
 restart_game.forEach((element) => {
   element.addEventListener("click", () => {
-    show_box(1);
+    showBox(1);
     buttonPlay.innerHTML = `${ICONS.GAME_PAUSE} Pause`;
     game.is_playing = true;
-    get_infor_player();
+    getInfoPlayer();
     initGame();
     // cho auto tinh gio lai
     time = setInterval(handleTime, 1000);
     play();
-    chose_audio("play");
+    choseAudio("play");
   });
 });
 
 play_game.addEventListener("click", () => {
-  show_box(1);
+  showBox(1);
   buttonPlay.innerHTML = `${ICONS.GAME_PAUSE} Pause`;
   game.is_playing = true;
-  get_infor_player();
+  getInfoPlayer();
   initGame();
   play();
   time = setInterval(handleTime, 1000);
-  chose_audio("play");
+  choseAudio("play");
 });
 
-const show_history_match = () => {
+const showHistoryMatch = () => {
   let box = document.querySelector(".match-local");
   let data = "";
   let lenght = history_match[0].score.length;
@@ -673,13 +673,13 @@ const show_history_match = () => {
       `;
   }
   box.innerHTML = data;
-  show_box(5);
+  showBox(5);
 };
 let view_history = document.querySelectorAll(".view_history");
 view_history.forEach((element) => {
   element.addEventListener("click", () => {
-    show_history_match();
-    chose_audio("end");
+    showHistoryMatch();
+    choseAudio("end");
   });
 });
 
@@ -705,21 +705,21 @@ const getAllMatch = async () => {
   box.innerHTML = matches;
 };
 
-const view_infor_player = document.getElementById("view_infor_player");
-view_infor_player.addEventListener("click", async () => {
+const viewInfoPlayer = document.getElementById("view_infor_player");
+viewInfoPlayer.addEventListener("click", async () => {
   await getAllMatch();
-  show_box(3);
+  showBox(3);
 });
 
-const default_setting = () => {
-  change_theme("dark"); // theme: {dark, light}
-  change_level("easy"); // level: {easy, medium, hard}
-  change_state_player(1); // number or player: {1 player, 2 player}
-  change_speed(1); // speed snake {x1, x2, x3}
-  show_box(2); // hiện mục tutorial
-  // chose_audio('home');
+const defaultSetting = () => {
+  changeTheme("dark"); // theme: {dark, light}
+  changeLevel("easy"); // level: {easy, medium, hard}
+  changeStatePlayer(1); // number or player: {1 player, 2 player}
+  changeSpeed(1); // speed snake {x1, x2, x3}
+  showBox(2); // hiện mục tutorial
+  // choseAudio('home');
   document.getElementById("tutorial").addEventListener("click", tutorial);
   // setTimeout(tutorial, 2000);
 };
 
-default_setting();
+defaultSetting();
