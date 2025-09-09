@@ -1,5 +1,5 @@
 //todo _Thêm các hàm tiện tích hay dùng
-import { convertTime, getRandomInt, listColor, varCss } from "./utils.js";
+import { convertTime, getMountedSize, getRandomInt, listColor } from "./utils.js";
 
 //todo _Thêm các biến, object game
 import { bait, coefficient, dot_snake, ERROR, ESC, game, key, player, SPACE } from "./variable.js";
@@ -32,12 +32,22 @@ let ctx = canvas.getContext("2d");
 
 // lấy giá trị từ biến trong css (khi website responsive)
 // dạng string
-const canvasWidth = `${varCss("canvas-width").slice(0, varCss("canvas-width").indexOf("px"))}`;
-const canvasHeight = `${varCss("canvas-height").slice(0, varCss("canvas-height").indexOf("px"))}`;
+// const canvasWidth = `${varCss("canvas-width").slice(0, varCss("canvas-width").indexOf("px"))}`;
+// const canvasHeight = `${varCss("canvas-height").slice(0, varCss("canvas-height").indexOf("px"))}`;
+
+const { width, height } = getMountedSize({
+  widthName: "--canvas-width",
+  heightName: "--canvas-height",
+});
+
+console.log({ width, height });
+
+canvas.width = width;
+canvas.height = height;
 
 // parse sang dạng Int
-canvas.width = parseInt(`${canvasWidth}`);
-canvas.height = parseInt(`${canvasHeight}`);
+// canvas.width = parseInt(`${canvasWidth}`);
+// canvas.height = parseInt(`${canvasHeight}`);
 
 // gán giá trị cho object game
 game.width = canvas.width;

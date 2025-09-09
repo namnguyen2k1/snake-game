@@ -1,8 +1,9 @@
 @import "../scss/mixin";
 
-// class rời tạc
 .play__board {
   color: var(--font-color);
+  width: 100%;
+  height: 100%;
 }
 
 .box {
@@ -15,13 +16,13 @@
   border-radius: 1rem;
   color: var(--font-color);
   font-size: 1rem;
-  padding: 1rem;
 }
 
 .start_box {
   width: 100%;
   padding: 2rem 0rem;
   @include flexbox(row, flex-start);
+
   .start_item {
     display: inline-block;
     margin-right: 2rem;
@@ -31,6 +32,7 @@
     border: 0.2rem solid var(--font-color);
     background-color: var(--primary-color);
     color: var(--font-color);
+
     &:hover {
       cursor: pointer;
     }
@@ -38,21 +40,19 @@
 }
 
 .infor__container {
-  $height: calc(var(--game-height) - var(--canvas-height));
+  $height: 50px;
   width: 100%;
-  height: $height;
-  border: 0.1rem solid var(--font-color);
   background-color: var(--primary-color);
   color: var(--bg-color);
   border-radius: 1rem;
-  box-shadow: inset 0 0 0.5rem var(--bg-color);
-  margin-bottom: 0.5rem;
   @include flexbox(row, space-between);
+
   .infor {
     display: flex;
     line-height: $height;
     font-size: 1.5rem;
   }
+
   .score,
   .lives,
   #time_play {
@@ -68,9 +68,11 @@
 
 .tutorial_box {
   box-shadow: 0 0 1rem var(--primary-color);
+
   li {
     font-size: 1rem;
     padding-left: 5%;
+
     ul {
       font-size: 1rem;
     }
@@ -82,25 +84,30 @@
   min-height: 400px;
   max-height: 450px;
   @include flexbox(row, space-between, flex-start);
+
   .main_infor_player {
     width: 40%;
     height: 100%;
     padding: 0rem 5rem;
+
     .avatar {
       width: 100%;
       text-align: center;
       margin: 2rem 0rem;
+
       img {
         width: 10rem;
         height: 10rem;
         border-radius: 2rem;
         box-shadow: 0 0 1rem var(--primary-color);
+
         &:hover {
           transition: 0.7s;
           box-shadow: 0 0 2rem var(--primary-color);
         }
       }
     }
+
     .name,
     .email {
       width: 100%;
@@ -114,10 +121,12 @@
       border-radius: 0.5rem;
       position: relative;
       @include border_start_left_right(3px, var(--font-color), 0.7s);
+
       i {
         font-size: 1rem;
       }
     }
+
     .something {
       width: 100%;
       border-radius: 1rem;
@@ -125,6 +134,7 @@
       padding: 1rem;
       margin-top: 1rem;
       font-size: 1rem;
+
       i {
         font-size: 1rem;
       }
@@ -136,6 +146,7 @@
     height: 100%;
     padding-right: 3rem;
     text-align: center;
+
     .title {
       margin: 2rem 0rem;
     }
@@ -155,19 +166,23 @@
     border-color: var(--bg-color);
     padding: 0.5rem 1.5rem;
   }
+
   .history_item {
     width: 100%;
+
     &:hover {
       background-color: var(--heading-color);
       color: var(--bg-color);
     }
   }
+
   td {
     text-align: center;
     font-size: 1rem;
     border: 0rem;
     border-bottom: 0.2rem solid var(--font-color);
   }
+
   thead {
     background-color: var(--primary-color);
     border-top: 0.2rem solid var(--font-color);
@@ -176,14 +191,17 @@
 
 .loser {
   position: relative;
+
   #submit_score {
     position: absolute;
     top: 1rem;
     right: 1rem;
   }
+
   h2 {
     font-size: 1rem;
   }
+
   .start_box {
     @include flexbox(row, center);
   }
@@ -195,6 +213,7 @@
   @include scrollbar_style(5px, var(--bg-color), var(--font-color));
   padding-top: 2rem;
   @include flexbox(column, flex-start);
+
   .lose_player {
     width: 100%;
   }
@@ -206,26 +225,32 @@
     border-color: var(--bg-color);
     padding: 0.5rem 1.5rem;
   }
+
   .history_box {
     max-height: calc(70% * var(--canvas-height));
   }
+
   .history_item {
     width: 100%;
+
     &:hover {
       background-color: var(--heading-color);
       color: var(--bg-color);
     }
   }
+
   td {
     text-align: center;
     font-size: 1rem;
     border: 0rem;
     border-bottom: 0.2rem solid var(--font-color);
   }
+
   thead {
     background-color: var(--primary-color);
     border-top: 0.2rem solid var(--font-color);
   }
+
   .start_box {
     @include flexbox(row, center);
   }
@@ -236,6 +261,7 @@
     width: var(--game-width) !important;
     height: var(--game-height) !important;
   }
+
   .footer {
     display: none;
   }

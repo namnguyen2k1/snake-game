@@ -1,4 +1,4 @@
-const game = {
+export const game = {
   width: 240, // chiều dài của game_board
   height: 100, // chiều dọc của game_board
   count_player: 1, // số lượng rắn
@@ -12,7 +12,7 @@ const game = {
 };
 
 // thông số từng dot trong snake
-const dot_snake = {
+export const dot_snake = {
   x: 20, // tọa độ 0x
   y: 20, // tọa độ oy
   radius: 10,
@@ -22,7 +22,7 @@ const dot_snake = {
 };
 
 // các thông số liên quan đến mồi
-const bait = {
+export const bait = {
   x: 50, // tọa độ 0x
   y: 20, // tọa độ oy
   radius: 10, // bán kính mồi
@@ -31,35 +31,34 @@ const bait = {
 };
 
 // hệ sô zoom snake
-let coefficient = {
+export let coefficient = {
   last: 0,
   current: 0,
 };
 
 // thiết lập bộ key cho từng player
-const key = [
+export const key = [
   {
-    // key-code player_1 (các phím mũi tên)
+    // player 1 (arrow keys)
     left: 37,
     right: 39,
     up: 38,
     down: 40,
   },
   {
-    // key-code player_2 (các phím a, d, w, s)
+    // player_2 (a, d, w, s)
     left: 65,
     right: 68,
     up: 87,
     down: 83,
   },
-  // ! thêm các bộ key-code mới nếu có cho 3, 4 player
 ];
 // Other key-code
-const SPACE = 32;
-const ESC = 27;
-const ERROR = -1000;
+export const SPACE = 32;
+export const ESC = 27;
+export const ERROR = -1000;
 
-const player = {
+export const player = {
   name: [],
   address: [],
   score: [],
@@ -67,7 +66,7 @@ const player = {
   day_play: [],
 };
 
-const theme = {
+export const theme = {
   dark: {
     primaryColor: "#325b97",
     secondaryColor: "#000013",
@@ -83,5 +82,3 @@ const theme = {
     headingColor: "#064e48",
   },
 };
-
-export { ERROR, ESC, SPACE, bait, coefficient, dot_snake, game, key, player, theme };
