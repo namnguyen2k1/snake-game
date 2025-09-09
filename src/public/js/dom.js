@@ -1,4 +1,7 @@
 export const DOM = {
+  /**
+   * control.js
+   */
   bodyEl: document.querySelector("body"),
   // theme
   toggleThemeEl: document.getElementById("toggleTheme"),
@@ -30,4 +33,24 @@ export const DOM = {
   audioBaitEl: document.getElementById("Audio_bait"),
   // box
   boxes: document.querySelectorAll(".box"),
+
+  /**
+   * app.js
+   */
+  canvasEl: document.getElementById("Canvas"),
+  timePlayEl: document.getElementById("time_play"),
+  scorePlayerEls: [
+    document.getElementById("score_player_1"),
+    document.getElementById("score_player_2"),
+  ],
+  usernameLocalEl: document.getElementById("username-local"),
+  loserBoxEl: document.querySelector(".loser_box"),
+  playButtonEl: document.getElementById("play"),
+  playGameButtonEl: document.getElementById("play_game"),
+  restartGameEls: document.querySelectorAll(".restart_game"),
+  matchLocalBoxEl: document.querySelector(".match-local"),
+  viewHistoryEls: document.querySelectorAll(".view_history"),
+  matchServerBoxEl: document.querySelector(".match-server"),
+  viewInfoPlayerEl: document.getElementById("view_infor_player"),
+  tutorialButtonEl: document.getElementById("tutorial"),
 };
