@@ -39,4 +39,15 @@ export const APP_DOM = {
   matchServerBoxEl: document.querySelector(".match-server"),
   viewInfoPlayerEl: document.getElementById("view_infor_player"),
   tutorialButtonEl: document.getElementById("tutorial"),
+  classes: {
+    audioPause: "pause",
+    hiddenBox: "display_none",
+    fas: "fas",
+    far: "far",
+    lightTheme: "light_theme",
+    darkTheme: "dark_theme",
+    toggleLight: "light",
+    toggleDark: "dark",
+    deadPlayer: "lose_player",
+  },
 };

@@ -12,15 +12,12 @@ export const getRandomColor = () => {
   return listColor[getRandomInt(listColor.length)];
 };
 
-export const convertTime = (second) => {
-  let time = "";
-  const h = Math.floor(second / 3600);
-  time += h < 10 ? `0${h}` : `${h}`;
-  const m = Math.floor((second - h * 3600) / 60);
-  time += m < 10 ? `:0${m}` : `:${m}`;
-  const s = second - 3600 * h - 60 * m;
-  time += s < 10 ? `:0${s}` : `:${s}`;
-  return time;
+export const convertTime = (totalSeconds) => {
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor((totalSeconds % 3600) / 60);
+  const s = totalSeconds % 60;
+
+  return [h, m, s].map((v) => String(v).padStart(2, "0")).join(":");
 };
 
 export function getMountedSize({ widthName, heightName }) {

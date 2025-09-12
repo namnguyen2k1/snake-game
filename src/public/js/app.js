@@ -17,15 +17,15 @@ import { APP_ICON } from "./shared/icon.js";
 import { convertTime, getMountedSize, getRandomColor, getRandomInt } from "./shared/utils.js";
 
 export const game = {
-  boardWidth: 240, // chiều dài của game_board
-  boardHeight: 100, // chiều dọc của game_board
-  playerCount: 1, // số lượng rắn
-  speedFactor: 1, // hệ tốc độ di chuyển của các con rắn
-  difficulty: "easy", // cấp độ chơi
-  isPlaying: false, // trạng thái game có đang start hay không?
-  snakesFindingBait: [], // rắn đang ở trạng thái tìm mồi
-  snakesDigesting: [], // trạng thái tiêu hóa của các snake
-  digestingTimers: [], // thời gian chờ tiêu hỏa của từng snake
+  boardWidth: 240,
+  boardHeight: 100,
+  playerCount: 1,
+  speedFactor: 1,
+  difficulty: "easy",
+  isPlaying: false,
+  snakesFindingBait: [],
+  snakesDigesting: [],
+  digestingTimers: [],
   theme: "",
   pressedKeys: [],
   coefficient: {
@@ -46,7 +46,6 @@ export const game = {
     playDates: [],
   },
 };
-
 
 const dot = new Dot();
 const bait = new Bait();
@@ -80,26 +79,34 @@ const initSnake = () => {
   }
 };
 
-const drawDot = (dot, index = false) => {
+const drawDot = (dot, shape = "rect") => {
   ctx.beginPath();
-  if (index === false) {
-    ctx.fillRect(dot.x - 5, dot.y - 5, dot.radius, dot.radius);
-    ctx.strokeStyle = game.theme === "dark" ? "white" : "black";
-    ctx.lineWidth = Math.max(1, Math.floor(dot.radius * 0.3));
-    ctx.strokeRect(dot.x - 5, dot.y - 5, dot.radius, dot.radius);
-  } else if (index === "circle") {
-    let Oy = dot.y;
-    let Ox = dot.x;
-    for (let i in game.playerCount) {
-      const { up, down, left, right } = KEYS[`player${i + 1}`];
-      if (game.pressedKeys[i].current === up || game.pressedKeys[i].current === down) {
-        Oy = dot.y + 0.5 * dot.radius;
-      } else if (game.pressedKeys[i].current === left || game.pressedKeys[i].current === right) {
-        Ox = dot.x + 0.5 * dot.radius;
-      }
+  switch (shape) {
+    case "rect": {
+      ctx.fillRect(dot.x - 5, dot.y - 5, dot.radius, dot.radius);
+      ctx.strokeStyle = game.theme === "dark" ? "white" : "black";
+      ctx.lineWidth = Math.max(1, Math.floor(dot.radius * 0.3));
+      ctx.strokeRect(dot.x - 5, dot.y - 5, dot.radius, dot.radius);
+      break;
     }
-    ctx.arc(Ox, Oy, dot.radius, 0, Math.PI * 2);
-    ctx.stroke();
+    case "circle": {
+      let oY = dot.y;
+      let oX = dot.x;
+      for (let i in game.playerCount) {
+        const { up, down, left, right } = KEYS[`player${i + 1}`];
+        const currentKey = game.pressedKeys[i].current;
+        if (currentKey === up || currentKey === down) {
+          oY = dot.y + 0.5 * dot.radius;
+        } else if (currentKey === left || currentKey === right) {
+          oX = dot.x + 0.5 * dot.radius;
+        }
+      }
+      ctx.arc(oX, oY, dot.radius, 0, Math.PI * 2);
+      ctx.stroke();
+      break;
+    }
+    default: {
+    }
   }
   ctx.fillStyle = dot.color;
   ctx.fill();
@@ -107,40 +114,29 @@ const drawDot = (dot, index = false) => {
 };
 
 const createBait = () => {
-  bait.color = `${getRandomColor()}`;
-  bait.coefficient = 1;
-  bait.radius = 10;
-  let special = getRandomInt(10);
-  if (special === 0) {
-    bait.radius = 30;
-    bait.color = "gold";
-    bait.coefficient = 10;
+  const { boardWidth, boardHeight, playerCount, snakeLengths, snakes } = game;
+  Object.assign(bait, {
+    color: getRandomColor(),
+    coefficient: 1,
+    radius: 10,
+  });
+  if (getRandomInt(10) === 0) {
+    Object.assign(bait, { radius: 30, color: "gold", coefficient: 10 });
   }
-  bait.x = getRandomInt(game.boardWidth / 10) * 10;
-  bait.y = getRandomInt(game.boardHeight / 10) * 10;
-  // nếu bait khởi tạo đụng thành trái
-  if (bait.x < bait.radius) {
-    bait.x += bait.radius;
-  }
-  // nếu bait khởi tạo đụng thành phải
-  if (bait.x > game.boardWidth) {
-    bait.x -= bait.radius;
-  }
-  // nếu bait khởi tạo đụng thành trên
-  if (bait.y < bait.radius) {
-    bait.y += bait.radius;
-  }
-  // nếu bait khởi tạo đụng thành dưới
-  if (bait.y > game.boardHeight) {
-    bait.y -= bait.radius;
-  }
-  // vị trí mồi phải nằm ngoài các thân rắn
-  for (let i = 0; i < game.playerCount; i++) {
-    for (let j = 0; j < game.snakeLengths[i].current; j++) {
-      if (game.snakes[i][j].x === bait.x && game.snakes[i][j].y === bait.y) {
-        // get vị trí lại cho dot
-        bait.x = getRandomInt(game.boardWidth / 10) * 10;
-        bait.y = getRandomInt(game.boardHeight / 10) * 10;
+  bait.x = getRandomInt(boardWidth / 10) * 10;
+  bait.y = getRandomInt(boardHeight / 10) * 10;
+
+  if (bait.x < bait.radius) bait.x += bait.radius;
+  if (bait.x > boardWidth) bait.x -= bait.radius;
+  if (bait.y < bait.radius) bait.y += bait.radius;
+  if (bait.y > boardHeight) bait.y -= bait.radius;
+
+  for (let i = 0; i < playerCount; i++) {
+    for (let j = 0; j < snakeLengths[i].current; j++) {
+      const { x, y } = snakes[i][j];
+      if (x === bait.x && y === bait.y) {
+        bait.x = getRandomInt(boardWidth / 10) * 10;
+        bait.y = getRandomInt(boardHeight / 10) * 10;
       }
     }
   }
@@ -209,11 +205,12 @@ const initTime = () => {
   timePlay.innerText = `00:00:00`;
 };
 
-const updateScore = (i, fa = false) => {
-  APP_DOM.scorePlayerEls[i].innerText = `Player ${i + 1}: ${game.playerStats.scores[i]}`;
-  if (fa && APP_DOM.scorePlayerEls[1]) {
+const updateScore = (i, mode = "solo") => {
+  if (mode === "solo" && APP_DOM.scorePlayerEls[1]) {
     APP_DOM.scorePlayerEls[1].innerHTML = ``;
+    return;
   }
+  APP_DOM.scorePlayerEls[i].innerText = `Player ${i + 1}: ${game.playerStats.scores[i]}`;
 };
 
 const collisionBait = (i) => {
@@ -236,7 +233,7 @@ const collisionBait = (i) => {
   }
 
   if (game.playerCount === 1) {
-    updateScore(i, "fa");
+    updateScore(i, "solo");
   } else {
     updateScore(i);
   }
@@ -244,24 +241,25 @@ const collisionBait = (i) => {
 };
 
 const collisionWall = (current_snake) => {
-  const head = game.snakes[current_snake][0];
-  if (head.x <= 0 || head.x >= game.boardWidth || head.y <= 0 || head.y >= game.boardHeight) {
-    return true;
-  }
-  return false;
+  const { x, y } = game.snakes[current_snake][0];
+  const { boardWidth, boardHeight } = game;
+  return x <= 0 || x >= boardWidth || y <= 0 || y >= boardHeight;
 };
 
 const collisionOtherSnake = (snakeIndex) => {
-  if (snakeIndex === 0) return false;
+  if (snakeIndex === 0) {
+    return false;
+  }
   for (let i = 0; i < game.playerCount; i++) {
-    if (i !== snakeIndex) {
-      for (let j = 0; j < game.snakeLengths[i].current; j++) {
-        if (
-          game.snakes[snakeIndex][0].x === game.snakes[i][j].x &&
-          game.snakes[snakeIndex][0].y === game.snakes[i][j].y
-        ) {
-          return true;
-        }
+    if (i === snakeIndex) {
+      continue;
+    }
+    for (let j = 0; j < game.snakeLengths[i].current; j++) {
+      if (
+        game.snakes[snakeIndex][0].x === game.snakes[i][j].x &&
+        game.snakes[snakeIndex][0].y === game.snakes[i][j].y
+      ) {
+        return true;
       }
     }
   }
@@ -272,10 +270,7 @@ const keyInput = (e) => {
   const keyCode = e.keyCode;
   for (let i = 0; i < game.playerCount; i++) {
     const { left, right, up, down } = KEYS[`player${i + 1}`];
-    if ([left, right, up, down].includes(keyCode)) {
-      return keyCode;
-    }
-    if ([KEYS.space, KEYS.esc].includes(keyCode)) {
+    if ([left, right, up, down, KEYS.space, KEYS.esc].includes(keyCode)) {
       return keyCode;
     }
   }
@@ -287,8 +282,7 @@ const partition = (keyCode) => {
     const { left, right, up, down } = KEYS[`player${i + 1}`];
     if ([left, right, up, down].includes(keyCode)) {
       return i + 1;
-    }
-    if ([KEYS.space, KEYS.esc].includes(keyCode)) {
+    } else if ([KEYS.space, KEYS.esc].includes(keyCode)) {
       return 102;
     }
   }
@@ -317,7 +311,7 @@ const getInfoPlayer = () => {
   }
 };
 
-const lose = (lose_player) => {
+const lose = (currentPlayer) => {
   let timePlay = convertTime(game.elapsedSeconds);
   let username = APP_DOM.usernameLocalEl;
 
@@ -336,10 +330,10 @@ const lose = (lose_player) => {
   APP_DOM.playButtonEl.innerHTML = "Start";
   if (game.playerCount === 1) {
     showBox(4);
-    let item = document.createElement("h2");
-    item.classList.add("lose_player");
-    item.innerHTML = `Player ${lose_player}.You got ${
-      game.playerStats.scores[lose_player - 1]
+    const item = document.createElement("h2");
+    item.classList.add(APP_DOM.classes.deadPlayer);
+    item.innerHTML = `Player ${currentPlayer}.You got ${
+      game.playerStats.scores[currentPlayer - 1]
     } points. Come on, let's play again!!!`;
     loserBox.appendChild(item);
     game.matchHistory[0].score.push(game.playerStats.scores[0]);
@@ -354,11 +348,11 @@ const lose = (lose_player) => {
       game.matchHistory[i].score.push(game.playerStats.scores[i]);
       game.matchHistory[i].date_play.push(`${game.playerStats.playDates[i]}`);
       game.matchHistory[i].time_play.push(`${timePlay}`);
-      if (i + 1 !== lose_player) {
+      if (i + 1 !== currentPlayer) {
         win_player = i + 1;
       }
       let item = document.createElement("h2");
-      item.classList.add("lose_player");
+      item.classList.add(APP_DOM.classes.deadPlayer);
       item.innerText = `Player ${i + 1}.You got ${game.playerStats.scores[i]} points. Come on, let's play again!!!`;
       loserBox.appendChild(item);
     }

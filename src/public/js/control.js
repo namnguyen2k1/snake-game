@@ -20,34 +20,34 @@ export const changeTheme = (stateTheme) => {
     APP_DOM.bodyEl.classList.remove(removeClass);
   };
   if (stateTheme === "light") {
-    applyTheme("light", APP_ICON.SUN, "light_theme", "dark_theme");
+    applyTheme("light", APP_ICON.SUN, APP_DOM.classes.lightTheme, APP_DOM.classes.darkTheme);
   } else if (stateTheme === "dark") {
-    applyTheme("dark", APP_ICON.MOON, "dark_theme", "light_theme");
+    applyTheme("dark", APP_ICON.MOON, APP_DOM.classes.darkTheme, APP_DOM.classes.lightTheme);
   }
 };
 
 const toggleThemeEl = APP_DOM.toggleThemeEl;
 toggleThemeEl.addEventListener("click", () => {
-  const isLight = toggleThemeEl.classList.contains("light");
+  const isLight = toggleThemeEl.classList.contains(APP_DOM.classes.toggleLight);
   if (isLight) {
     toggleThemeEl.innerHTML = APP_ICON.MOON;
-    toggleThemeEl.classList.remove("light");
+    toggleThemeEl.classList.remove(APP_DOM.classes.toggleLight);
     changeTheme("dark");
   } else {
     toggleThemeEl.innerHTML = APP_ICON.SUN;
-    toggleThemeEl.classList.add("light");
-    changeTheme("light");
+    toggleThemeEl.classList.add(APP_DOM.classes.toggleLight);
+    changeTheme(APP_DOM.classes.toggleLight);
   }
 });
 
 export const saveScore = async (e) => {
   const match = JSON.parse(localStorage["match"]) || "no match";
-  e.classList.remove("far");
-  e.classList.add("fas");
+  e.classList.remove(APP_DOM.classes.far);
+  e.classList.add(APP_DOM.classes.fas);
   await callApiSaveMatchResult(match);
   setTimeout(() => {
-    e.classList.remove("fas");
-    e.classList.add("far");
+    e.classList.remove(APP_DOM.classes.fas);
+    e.classList.add(APP_DOM.classes.far);
   }, 3000);
 };
 
@@ -109,19 +109,19 @@ export const choseAudio = (audio_name) => {
   let audio = document.getElementById("Audio");
   audio.src = `/audio/${audio_name}_music.mp3`;
   audio.play();
-  audio.classList.remove("pause");
+  audio.classList.remove(APP_DOM.classes.audioPause);
   APP_DOM.controlAudioEl.innerHTML = APP_ICON.AUDIO_PLAY;
 };
 
 APP_DOM.controlAudioEl.addEventListener("click", () => {
   const audio = APP_DOM.audioMainEl;
-  if (audio.classList.contains("pause")) {
+  if (audio.classList.contains(APP_DOM.classes.audioPause)) {
     audio.play();
-    audio.classList.remove("pause");
+    audio.classList.remove(APP_DOM.classes.audioPause);
     APP_DOM.controlAudioEl.innerHTML = APP_ICON.AUDIO_PLAY;
   } else {
     audio.pause();
-    audio.classList.add("pause");
+    audio.classList.add(APP_DOM.classes.audioPause);
     APP_DOM.controlAudioEl.innerHTML = APP_ICON.AUDIO_PAUSE;
   }
 });
@@ -139,7 +139,7 @@ export const tutorial = () => {
 export const showBox = (index) => {
   const boxes = APP_DOM.boxes;
   for (let i = 0; i < boxes.length; i++) {
-    boxes[i].classList.add("display_none");
+    boxes[i].classList.add(APP_DOM.classes.hiddenBox);
   }
-  boxes[index - 1].classList.remove("display_none");
+  boxes[index - 1].classList.remove(APP_DOM.classes.hiddenBox);
 };
