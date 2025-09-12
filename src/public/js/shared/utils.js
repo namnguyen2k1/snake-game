@@ -1,24 +1,16 @@
+import { listColor } from "./constant.js";
+
 export const varCss = (name, value) => {
   if (name[0] != "-") name = "--" + name;
   if (value) document.documentElement.style.setProperty(name, value);
   return getComputedStyle(document.documentElement).getPropertyValue(name);
 };
 
-export const listColor = [
-  "firebrick",
-  "blue",
-  "green",
-  "yellow",
-  "orange",
-  "violet",
-  "lightsalmon",
-  "khaki",
-  "tan",
-  "sandybrown",
-  "olive",
-];
-
 export const getRandomInt = (max) => Math.floor(Math.random() * max);
+
+export const getRandomColor = () => {
+  return listColor[getRandomInt(listColor.length)];
+};
 
 export const convertTime = (second) => {
   let time = "";

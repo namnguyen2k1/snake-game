@@ -1,39 +1,41 @@
-import { callApiSaveMatchResult } from "./api.js";
-import { DOM } from "./dom.js";
-import { ICONS } from "./icon.js";
-import { varCss } from "./utils.js";
-import { game, theme } from "./variable.js";
+import { game } from "./app.js";
+import { callApiSaveMatchResult } from "./shared/api.js";
+import { theme } from "./shared/constant.js";
+import { APP_DOM } from "./shared/dom.js";
+import { APP_ICON } from "./shared/icon.js";
+import { varCss } from "./shared/utils.js";
 
 export const changeTheme = (stateTheme) => {
   if (game.is_playing) return;
   const applyTheme = (themeKey, icon, addClass, removeClass) => {
     game.theme = themeKey;
-    DOM.toggleThemeEl.innerHTML = icon;
+    APP_DOM.toggleThemeEl.innerHTML = icon;
     const colors = theme[themeKey];
     varCss("primary-color", colors.primaryColor);
     varCss("secondary-color", colors.secondaryColor);
     varCss("bg-color", colors.bgColor);
     varCss("heading-color", colors.headingColor);
     varCss("font-color", colors.fontColor);
-    DOM.bodyEl.classList.add(addClass);
-    DOM.bodyEl.classList.remove(removeClass);
+    APP_DOM.bodyEl.classList.add(addClass);
+    APP_DOM.bodyEl.classList.remove(removeClass);
   };
   if (stateTheme === "light") {
-    applyTheme("light", ICONS.SUN, "light_theme", "dark_theme");
+    applyTheme("light", APP_ICON.SUN, "light_theme", "dark_theme");
   } else if (stateTheme === "dark") {
-    applyTheme("dark", ICONS.MOON, "dark_theme", "light_theme");
+    applyTheme("dark", APP_ICON.MOON, "dark_theme", "light_theme");
   }
 };
 
-DOM.toggleThemeEl.addEventListener("click", () => {
-  const isLight = DOM.toggleThemeEl.classList.contains("light");
+const toggleThemeEl = APP_DOM.toggleThemeEl;
+toggleThemeEl.addEventListener("click", () => {
+  const isLight = toggleThemeEl.classList.contains("light");
   if (isLight) {
-    DOM.toggleThemeEl.innerHTML = ICONS.MOON;
-    DOM.toggleThemeEl.classList.remove("light");
+    toggleThemeEl.innerHTML = APP_ICON.MOON;
+    toggleThemeEl.classList.remove("light");
     changeTheme("dark");
   } else {
-    DOM.toggleThemeEl.innerHTML = ICONS.SUN;
-    DOM.toggleThemeEl.classList.add("light");
+    toggleThemeEl.innerHTML = APP_ICON.SUN;
+    toggleThemeEl.classList.add("light");
     changeTheme("light");
   }
 });
@@ -50,45 +52,39 @@ export const saveScore = async (e) => {
 };
 
 let index = 1;
-DOM.submitScoreEl.addEventListener("click", () => {
-  if (index === 1) saveScore(DOM.submitScoreEl);
+APP_DOM.submitScoreEl.addEventListener("click", () => {
+  if (index === 1) saveScore(APP_DOM.submitScoreEl);
 });
 
 export const changeLevel = (level) => {
   if (game.is_playing) return;
   const updateLevel = (key, icon, speedFactor) => {
-    DOM.levelDisplayEl.innerHTML = `${icon} ${key.charAt(0).toUpperCase() + key.slice(1)}`;
+    APP_DOM.levelDisplayEl.innerHTML = `${icon} ${key.charAt(0).toUpperCase() + key.slice(1)}`;
     game.speedPlay /= speedFactor;
     game.levelPlaying = key;
   };
   const buttons = [
-    { id: "easy", key: "easy", icon: ICONS.LV_EASY, speed: 1 },
-    { id: "medium", key: "medium", icon: ICONS.LV_MEDIUM, speed: 2 },
-    { id: "hard", key: "hard", icon: ICONS.LV_HARD, speed: 3 },
+    { id: "easy", key: "easy", icon: APP_ICON.LV_EASY, speed: 1 },
+    { id: "medium", key: "medium", icon: APP_ICON.LV_MEDIUM, speed: 2 },
+    { id: "hard", key: "hard", icon: APP_ICON.LV_HARD, speed: 3 },
   ];
   buttons.forEach(({ id, key, icon, speed }) => {
-    const btn = DOM.levelButtons[id];
-    if (btn) {
-      btn.addEventListener("click", () => updateLevel(key, icon, speed));
-    }
+    APP_DOM.levelButtons[id].addEventListener("click", () => updateLevel(key, icon, speed));
   });
   if (["easy", "medium", "hard"].includes(level)) {
-    const selected = buttons.find((b) => b.key === level);
-    updateLevel(selected.key, selected.icon, selected.speed);
+    const { key, icon, speed } = buttons.find((b) => b.key === level);
+    updateLevel(key, icon, speed);
   }
 };
 
 export const changeSpeed = (speed) => {
   if (game.is_playing) return;
   const updateSpeed = (multiplier) => {
-    DOM.speedDisplayEl.innerHTML = `${ICONS.SPEED}Speed x${multiplier}`;
+    APP_DOM.speedDisplayEl.innerHTML = `${APP_ICON.SPEED}Speed x${multiplier}`;
     game.speedPlay /= multiplier;
   };
   [1, 2, 3].forEach((multiplier) => {
-    const btn = DOM.speedButtons[`x${multiplier}`];
-    if (btn) {
-      btn.addEventListener("click", () => updateSpeed(multiplier));
-    }
+    APP_DOM.speedButtons[`x${multiplier}`].addEventListener("click", () => updateSpeed(multiplier));
   });
   if ([1, 2, 3].includes(speed)) {
     updateSpeed(speed);
@@ -98,18 +94,12 @@ export const changeSpeed = (speed) => {
 export const changeStatePlayer = (state) => {
   if (game.is_playing) return;
   const updateState = (count) => {
-    const icons = count === 1 ? `${ICONS.USER}` : `${ICONS.USER} ${ICONS.USER}`;
-    DOM.playerDisplayEl.innerHTML = `${icons} Player`;
+    const icons = count === 1 ? `${APP_ICON.USER}` : `${APP_ICON.USER} ${APP_ICON.USER}`;
+    APP_DOM.playerDisplayEl.innerHTML = `${icons} Player`;
     game.count_player = count;
   };
-  const aloneBtn = DOM.playerButtons.alone;
-  if (aloneBtn) {
-    aloneBtn.addEventListener("click", () => updateState(1));
-  }
-  const partnerBtn = DOM.playerButtons.partner;
-  if (partnerBtn) {
-    partnerBtn.addEventListener("click", () => updateState(2));
-  }
+  APP_DOM.playerButtons.alone.addEventListener("click", () => updateState(1));
+  APP_DOM.playerButtons.partner.addEventListener("click", () => updateState(2));
   if ([1, 2].includes(state)) {
     updateState(state);
   }
@@ -120,24 +110,24 @@ export const choseAudio = (audio_name) => {
   audio.src = `/audio/${audio_name}_music.mp3`;
   audio.play();
   audio.classList.remove("pause");
-  DOM.controlAudioEl.innerHTML = ICONS.AUDIO_PLAY;
+  APP_DOM.controlAudioEl.innerHTML = APP_ICON.AUDIO_PLAY;
 };
 
-DOM.controlAudioEl.addEventListener("click", () => {
-  let audio = DOM.audioMainEl;
+APP_DOM.controlAudioEl.addEventListener("click", () => {
+  const audio = APP_DOM.audioMainEl;
   if (audio.classList.contains("pause")) {
     audio.play();
     audio.classList.remove("pause");
-    DOM.controlAudioEl.innerHTML = ICONS.AUDIO_PLAY;
+    APP_DOM.controlAudioEl.innerHTML = APP_ICON.AUDIO_PLAY;
   } else {
     audio.pause();
     audio.classList.add("pause");
-    DOM.controlAudioEl.innerHTML = ICONS.AUDIO_PAUSE;
+    APP_DOM.controlAudioEl.innerHTML = APP_ICON.AUDIO_PAUSE;
   }
 });
 
 export const ateBait = (audio_name) => {
-  let audio = DOM.audioBaitEl;
+  const audio = APP_DOM.audioBaitEl;
   audio.src = `/audio/${audio_name}_music.mp3`;
   audio.play();
 };
@@ -147,7 +137,7 @@ export const tutorial = () => {
 };
 
 export const showBox = (index) => {
-  let boxes = DOM.boxes;
+  const boxes = APP_DOM.boxes;
   for (let i = 0; i < boxes.length; i++) {
     boxes[i].classList.add("display_none");
   }

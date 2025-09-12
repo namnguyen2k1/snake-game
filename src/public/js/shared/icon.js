@@ -1,4 +1,4 @@
-export const ICONS = {
+export const APP_ICON = {
   SUN: '<i class="fas fa-sun"></i>',
   MOON: '<i class="fas fa-moon"></i>',
   LV_EASY: '<i class="fas fa-laugh-beam"></i>',
