@@ -6,7 +6,7 @@ import { APP_ICON } from "./shared/icon.js";
 import { varCss } from "./shared/utils.js";
 
 export const changeTheme = (stateTheme) => {
-  if (game.is_playing) return;
+  if (game.isPlaying) return;
   const applyTheme = (themeKey, icon, addClass, removeClass) => {
     game.theme = themeKey;
     APP_DOM.toggleThemeEl.innerHTML = icon;
@@ -57,11 +57,11 @@ APP_DOM.submitScoreEl.addEventListener("click", () => {
 });
 
 export const changeLevel = (level) => {
-  if (game.is_playing) return;
+  if (game.isPlaying) return;
   const updateLevel = (key, icon, speedFactor) => {
     APP_DOM.levelDisplayEl.innerHTML = `${icon} ${key.charAt(0).toUpperCase() + key.slice(1)}`;
-    game.speedPlay /= speedFactor;
-    game.levelPlaying = key;
+    game.speedFactor /= speedFactor;
+    game.difficulty = key;
   };
   const buttons = [
     { id: "easy", key: "easy", icon: APP_ICON.LV_EASY, speed: 1 },
@@ -78,10 +78,10 @@ export const changeLevel = (level) => {
 };
 
 export const changeSpeed = (speed) => {
-  if (game.is_playing) return;
+  if (game.isPlaying) return;
   const updateSpeed = (multiplier) => {
     APP_DOM.speedDisplayEl.innerHTML = `${APP_ICON.SPEED}Speed x${multiplier}`;
-    game.speedPlay /= multiplier;
+    game.speedFactor /= multiplier;
   };
   [1, 2, 3].forEach((multiplier) => {
     APP_DOM.speedButtons[`x${multiplier}`].addEventListener("click", () => updateSpeed(multiplier));
@@ -92,11 +92,11 @@ export const changeSpeed = (speed) => {
 };
 
 export const changeStatePlayer = (state) => {
-  if (game.is_playing) return;
+  if (game.isPlaying) return;
   const updateState = (count) => {
     const icons = count === 1 ? `${APP_ICON.USER}` : `${APP_ICON.USER} ${APP_ICON.USER}`;
     APP_DOM.playerDisplayEl.innerHTML = `${icons} Player`;
-    game.count_player = count;
+    game.playerCount = count;
   };
   APP_DOM.playerButtons.alone.addEventListener("click", () => updateState(1));
   APP_DOM.playerButtons.partner.addEventListener("click", () => updateState(2));
