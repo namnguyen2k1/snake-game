@@ -105,9 +105,9 @@ export const changeStatePlayer = (state) => {
   }
 };
 
-export const choseAudio = (audio_name) => {
+export const choseAudio = (src) => {
   let audio = document.getElementById("Audio");
-  audio.src = `/audio/${audio_name}_music.mp3`;
+  audio.src = src;
   audio.play();
   audio.classList.remove(APP_DOM.classes.audioPause);
   APP_DOM.controlAudioEl.innerHTML = APP_ICON.AUDIO_PLAY;
@@ -126,9 +126,9 @@ APP_DOM.controlAudioEl.addEventListener("click", () => {
   }
 });
 
-export const ateBait = (audio_name) => {
+export const playAteBaitAudio = (src) => {
   const audio = APP_DOM.audioBaitEl;
-  audio.src = `/audio/${audio_name}_music.mp3`;
+  audio.src = src;
   audio.play();
 };
 

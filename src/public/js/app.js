@@ -1,17 +1,17 @@
 import {
-  ateBait,
   changeLevel,
   changeSpeed,
   changeStatePlayer,
   changeTheme,
   choseAudio,
+  playAteBaitAudio,
   showBox,
   tutorial,
 } from "./control.js";
 import { Bait } from "./models/bait.model.js";
 import { Dot } from "./models/dot.model.js";
 import { callApiGetMatchHistory } from "./shared/api.js";
-import { KEYS } from "./shared/constant.js";
+import { AUDIO_TYPE, KEYS } from "./shared/constant.js";
 import { APP_DOM } from "./shared/dom.js";
 import { APP_ICON } from "./shared/icon.js";
 import { convertTime, getMountedSize, getRandomColor, getRandomInt } from "./shared/utils.js";
@@ -205,20 +205,12 @@ const initTime = () => {
   timePlay.innerText = `00:00:00`;
 };
 
-const updateScore = (i, mode = "solo") => {
-  if (mode === "solo" && APP_DOM.scorePlayerEls[1]) {
-    APP_DOM.scorePlayerEls[1].innerHTML = ``;
-    return;
-  }
+const updateScore = (i) => {
   APP_DOM.scorePlayerEls[i].innerText = `Player ${i + 1}: ${game.playerStats.scores[i]}`;
 };
 
 const collisionBait = (i) => {
-  if (bait.radius === 30) {
-    ateBait("bait_special");
-  } else {
-    ateBait("bait");
-  }
+  playAteBaitAudio(bait.radius === 30 ? AUDIO_TYPE.ateSpecialBait : AUDIO_TYPE.ateBait);
   game.digestingTimers[i] = bait.coefficient;
   game.snakesDigesting[i] = true;
   game.snakesFindingBait[i] = true;
@@ -231,22 +223,17 @@ const collisionBait = (i) => {
     bait.radius += 2;
     game.coefficient.last = game.coefficient.current;
   }
-
-  if (game.playerCount === 1) {
-    updateScore(i, "solo");
-  } else {
-    updateScore(i);
-  }
+  updateScore(i);
   updateSnake(i);
 };
 
-const collisionWall = (current_snake) => {
-  const { x, y } = game.snakes[current_snake][0];
+const isSnakeHitWall = (snakeIndex) => {
+  const { x, y } = game.snakes[snakeIndex][0];
   const { boardWidth, boardHeight } = game;
   return x <= 0 || x >= boardWidth || y <= 0 || y >= boardHeight;
 };
 
-const collisionOtherSnake = (snakeIndex) => {
+const isSnakeHitOtherSnake = (snakeIndex) => {
   if (snakeIndex === 0) {
     return false;
   }
@@ -303,7 +290,7 @@ const keyValid = (oldKey, newKey) => {
   return newKey;
 };
 
-const getInfoPlayer = () => {
+const resetPlayerInfo = () => {
   for (let i = 0; i < game.playerCount; i++) {
     game.playerStats.scores[i] = 0;
     game.playerStats.playTimes[i] = "00:00:00";
@@ -311,7 +298,7 @@ const getInfoPlayer = () => {
   }
 };
 
-const lose = (currentPlayer) => {
+const handleDead = (currentPlayer) => {
   let timePlay = convertTime(game.elapsedSeconds);
   let username = APP_DOM.usernameLocalEl;
 
@@ -325,7 +312,7 @@ const lose = (currentPlayer) => {
 
   const loserBox = APP_DOM.loserBoxEl;
   loserBox.innerHTML = "<h1>Oh không, bạn đã chết!</h1>";
-  choseAudio("lose");
+  choseAudio(AUDIO_TYPE.dead);
 
   APP_DOM.playButtonEl.innerHTML = "Start";
   if (game.playerCount === 1) {
@@ -334,12 +321,12 @@ const lose = (currentPlayer) => {
     item.classList.add(APP_DOM.classes.deadPlayer);
     item.innerHTML = `Player ${currentPlayer}.You got ${
       game.playerStats.scores[currentPlayer - 1]
-    } points. Come on, let's play again!!!`;
+    } points. Let's play again!!!`;
     loserBox.appendChild(item);
     game.matchHistory[0].score.push(game.playerStats.scores[0]);
     game.matchHistory[0].date_play.push(`${game.playerStats.playDates[0]}`);
     game.matchHistory[0].time_play.push(`${timePlay}`);
-    initGame();
+    initialGame();
     console.log(game.matchHistory);
   } else if (game.playerCount === 2) {
     showBox(4);
@@ -353,13 +340,13 @@ const lose = (currentPlayer) => {
       }
       let item = document.createElement("h2");
       item.classList.add(APP_DOM.classes.deadPlayer);
-      item.innerText = `Player ${i + 1}.You got ${game.playerStats.scores[i]} points. Come on, let's play again!!!`;
+      item.innerText = `Player ${i + 1}. You got ${game.playerStats.scores[i]} points. let's play again!`;
       loserBox.appendChild(item);
     }
   }
 };
 
-const initGame = () => {
+const initialGame = () => {
   game.snakeLengths = [];
   game.pressedKeys = [];
   game.specialKey = KEYS.error;
@@ -398,7 +385,7 @@ const initGame = () => {
   bait.radius = 10;
 };
 
-const play = () => {
+const handlePlayGame = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   document.onkeydown = (e) => {
     const new_key = keyInput(e);
@@ -431,7 +418,7 @@ const play = () => {
     ) {
       if (game.digestingTimers[i]) {
         game.isPlaying = false;
-        lose(i + 1);
+        handleDead(i + 1);
       } else if (!game.digestingTimers[i]) {
         collisionBait(i);
         const waitChangeColor = game.digestingTimers[i] * 1000;
@@ -440,19 +427,19 @@ const play = () => {
         }, waitChangeColor);
       }
     }
-    if (collisionWall(i)) {
+    if (isSnakeHitWall(i)) {
       game.isPlaying = false;
-      lose(i + 1);
+      handleDead(i + 1);
     }
-    if (collisionOtherSnake(i)) {
+    if (isSnakeHitOtherSnake(i)) {
       game.isPlaying = false;
-      lose(i + 1);
+      handleDead(i + 1);
     }
   }
   if (game.isPlaying) {
     const speed = game.speedFactor * 100;
     setTimeout(() => {
-      requestAnimationFrame(play);
+      requestAnimationFrame(handlePlayGame);
     }, speed);
   }
 };
@@ -462,11 +449,11 @@ buttonPlay.onclick = () => {
   if (buttonPlay.innerText === "Start" && !game.isPlaying) {
     buttonPlay.innerHTML = `${APP_ICON.GAME_PAUSE} Pause`;
     game.isPlaying = true;
-    getInfoPlayer();
+    resetPlayerInfo();
     showBox(1);
-    initGame();
-    play();
-    choseAudio("play");
+    initialGame();
+    handlePlayGame();
+    choseAudio(AUDIO_TYPE.playing);
   }
 };
 
@@ -477,18 +464,18 @@ window.onkeydown = (e) => {
     buttonPlay.innerHTML = `${APP_ICON.GAME_PAUSE} Pause`;
     game.isPlaying = true;
     showBox(1);
-    getInfoPlayer();
-    initGame();
+    resetPlayerInfo();
+    initialGame();
     game.elapsedMs = setInterval(handleTime, 1000);
-    play();
-    choseAudio("play");
+    handlePlayGame();
+    choseAudio(AUDIO_TYPE.playing);
   } else if (buttonPlay.innerHTML == `${APP_ICON.GAME_PAUSE} Pause` && game.isPlaying) {
     buttonPlay.innerHTML = `${APP_ICON.GAME_PLAY} Continue`;
     game.isPlaying = false;
   } else if (buttonPlay.innerHTML == `${APP_ICON.GAME_PLAY} Continue` && !game.isPlaying) {
     buttonPlay.innerHTML = `${APP_ICON.GAME_PAUSE} Pause`;
     game.isPlaying = true;
-    requestAnimationFrame(play);
+    requestAnimationFrame(handlePlayGame);
   }
 };
 
@@ -497,11 +484,11 @@ APP_DOM.restartGameEls.forEach((element) => {
     showBox(1);
     buttonPlay.innerHTML = `${APP_ICON.GAME_PAUSE} Pause`;
     game.isPlaying = true;
-    getInfoPlayer();
-    initGame();
+    resetPlayerInfo();
+    initialGame();
     game.elapsedMs = setInterval(handleTime, 1000);
-    play();
-    choseAudio("play");
+    handlePlayGame();
+    choseAudio(AUDIO_TYPE.playing);
   });
 });
 
@@ -509,11 +496,11 @@ APP_DOM.playGameButtonEl.addEventListener("click", () => {
   showBox(1);
   buttonPlay.innerHTML = `${APP_ICON.GAME_PAUSE} Pause`;
   game.isPlaying = true;
-  getInfoPlayer();
-  initGame();
-  play();
+  resetPlayerInfo();
+  initialGame();
+  handlePlayGame();
   game.elapsedMs = setInterval(handleTime, 1000);
-  choseAudio("play");
+  choseAudio(AUDIO_TYPE.playing);
 });
 
 const showHistoryMatch = () => {
@@ -538,7 +525,7 @@ const showHistoryMatch = () => {
 APP_DOM.viewHistoryEls.forEach((element) => {
   element.addEventListener("click", () => {
     showHistoryMatch();
-    choseAudio("end");
+    choseAudio(AUDIO_TYPE.history);
   });
 });
 
@@ -561,13 +548,19 @@ const getAllMatch = async () => {
   APP_DOM.matchServerBoxEl.innerHTML = matches;
 };
 
+APP_DOM.titleGame?.addEventListener("click", () => {
+  showBox(2);
+  choseAudio(AUDIO_TYPE.home);
+});
+
 APP_DOM.viewInfoPlayerEl?.addEventListener("click", async () => {
   await getAllMatch();
   showBox(3);
+  choseAudio(AUDIO_TYPE.history);
 });
 APP_DOM.tutorialButtonEl?.addEventListener("click", tutorial);
 
-const defaultSetting = () => {
+const setting = () => {
   changeTheme("dark");
   changeLevel("easy");
   changeStatePlayer(1);
@@ -575,4 +568,4 @@ const defaultSetting = () => {
   showBox(2);
 };
 
-defaultSetting();
+setting();

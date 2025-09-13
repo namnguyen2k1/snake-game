@@ -46,3 +46,12 @@ export const listColor = [
   "sandybrown",
   "olive",
 ];
+
+export const AUDIO_TYPE = {
+  home: '/audio/home.mp3',
+  playing: '/audio/playing.mp3',
+  history: '/audio/history.mp3',
+  dead: '/audio/dead.mp3',
+  ateBait: '/audio/ate-bait.mp3',
+  ateSpecialBait: '/audio/ate-special-bait.mp3',
+}

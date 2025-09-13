@@ -1,16 +1,19 @@
-@import "../scss/mixin";
+@use '../scss/mixin' as *;
 
 :root {
   --game-height: 100dvh;
   --game-width: 100dvw;
-  --canvas-height: calc(100dvh - 150px);
-  --canvas-width: calc(100dvw - 200px);
-  --rank-height: 120px;
-  --primary-color: "#0d0b52";
-  --secondary-color: "#3458b9";
-  --font-color: "#424242";
-  --bg-color: "#ffffff";
-  --heading-color: "#292922";
+  --control-width: 200px;
+  --control-height: calc(100dvh - var(--header-height));
+  --header-height: 50px;
+  --canvas-height: calc(100dvh - var(--header-height));
+  --canvas-width: calc(100dvw - var(--control-width) + 20px);
+  --primary-color: #0d0b52;
+  --secondary-color: #3458b9;
+  --highlight-color: gold;
+  --font-color: #424242;
+  --bg-color: #ffffff;
+  --heading-color: #292922;
 }
 
 body {
@@ -39,53 +42,24 @@ body {
     radial-gradient(white, rgba(255, 255, 255, 0.15) 1px, transparent 30px),
     radial-gradient(white, rgba(255, 255, 255, 0.1) 2px, transparent 40px),
     radial-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1) 2px, transparent 30px);
-  background-size:
-    550px 550px,
-    350px 350px,
-    250px 250px,
-    150px 150px;
-  background-position:
-    0 0,
-    40px 60px,
-    130px 270px,
-    70px 100px;
+  background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
+  background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
 }
 
 .light_theme {
   background:
     radial-gradient(var(--bg-color) 3px, transparent 4px),
-    radial-gradient(var(--bg-color) 3px, transparent 4px), linear-gradient(#fff 4px, transparent 0),
-    linear-gradient(45deg,
-      transparent 74px,
-      transparent 75px,
-      #a4a4a4 75px,
-      #a4a4a4 76px,
-      transparent 77px,
-      transparent 109px),
-    linear-gradient(-45deg,
-      transparent 75px,
-      transparent 76px,
-      #a4a4a4 76px,
-      #a4a4a4 77px,
-      transparent 78px,
-      transparent 109px),
+    radial-gradient(var(--bg-color) 3px, transparent 4px),
+    linear-gradient(#fff 4px, transparent 0),
+    linear-gradient(45deg, transparent 74px, transparent 75px, #a4a4a4 75px, #a4a4a4 76px, transparent 77px, transparent 109px),
+    linear-gradient(-45deg, transparent 75px, transparent 76px, #a4a4a4 76px, #a4a4a4 77px, transparent 78px, transparent 109px),
     #fff;
-  background-size:
-    109px 109px,
-    109px 109px,
-    100% 6px,
-    109px 109px,
-    109px 109px;
-  background-position:
-    54px 55px,
-    0px 0px,
-    0px 0px,
-    0px 0px,
-    0px 0px;
+  background-size: 109px 109px, 109px 109px, 100% 6px, 109px 109px, 109px 109px;
+  background-position: 54px 55px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
 }
 
 .navbar {
-  height: 50px;
+  height: var(--header-height);
   width: 100%;
   @include flexbox(row, flex-end);
   gap: 10px;
@@ -93,7 +67,6 @@ body {
 
   .nav__item {
     padding: 0.3rem 2rem;
-    border: 0.1rem solid var(--font-color);
     border-radius: 0.5rem;
     color: var(--font-color);
     background-color: var(--primary-color);
@@ -105,41 +78,409 @@ body {
     }
 
     &:hover {
-      color: var(--bg-color);
-      background-color: var(--font-color);
+      color: var(--highlight-color) !important;
+      background-color: var(--bg-color);
+      outline: 2px solid var(--font-color);
     }
   }
 
   #title_game {
-    /* margin-left: 0rem; */
     margin-right: auto;
     font-size: 1rem;
-    /* padding: 0rem 2rem; */
-    border-radius: 999rem;
-    font-weight: 900;
+    color: var(--highlight-color);
     background-color: var(--bg-color);
-    /* border-top: 0rem; */
-    /* border-bottom: 2px solid var(--font-color); */
-    /* text-shadow: 0rem 0rem 0.5rem var(--primary-color); */
+    font-weight: 900;
   }
 }
 
-@import "./rank_component";
-
 .main__container {
   width: var(--game-width);
-  height: calc(var(--game-height) - 100px);
+  height: calc(var(--game-height) - var(--header-height));
   @include flexbox(row);
-  @import "./control";
-  @import "./play_board";
+
+  .control_container {
+    width: var(--control-width);
+    height: var(--control-height);
+    @include flexbox(column);
+    padding: 0.5rem;
+    padding-top: 0rem;
+
+    .control__box {
+      width: 100%;
+
+      .control {
+        width: 100%;
+        height: 50px;
+        position: relative;
+        margin-bottom: 0.5rem;
+
+        .control__title {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border-radius: 0.5rem;
+          @include flexbox(row, flex-start);
+          font-weight: 600;
+          background-color: var(--primary-color);
+          font-size: 1rem;
+          padding-left: 1rem;
+
+          i {
+            margin-right: 0.7rem;
+            font-size: 1rem;
+          }
+
+          &:hover {
+            cursor: pointer;
+            color: var(--highlight-color) !important;
+            background-color: var(--bg-color);
+            outline: 2px solid var(--font-color);
+          }
+        }
+
+        .item_box {
+          position: absolute;
+          top: 0;
+          left: 100%;
+          width: 100%;
+          background-color: var(--primary-color);
+          display: none;
+          border-radius: 0.5rem;
+          padding: 0.5rem;
+
+          .item {
+            width: 100%;
+            height: 50px;
+            @include flexbox(row, flex-start);
+            font-weight: 600;
+            font-size: 1rem;
+            padding-left: 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid var(--font-color);
+            margin-bottom: 0.5rem;
+
+            &:last-child {
+              margin-bottom: 0rem;
+            }
+
+            i {
+              margin-right: 0.7rem;
+              font-size: 1rem;
+            }
+
+            &:hover {
+              cursor: pointer;
+              color: var(--bg-color);
+              background-color: var(--font-color);
+            }
+          }
+        }
+
+        &:hover {
+          .control__title {
+            background-color: var(--bg-color);
+          }
+
+          .item_box {
+            display: block;
+            z-index: 1;
+          }
+        }
+      }
+    }
+
+    .match_box {
+      width: 100%;
+      margin: 0.5rem;
+      border-radius: 1rem;
+      background-color: var(--primary-color);
+      padding: 0.5rem;
+
+      .mem {
+        font-size: 1rem;
+        width: 100%;
+
+        &:nth-child(1) {
+          text-align: left;
+        }
+
+        &:nth-child(2) {
+          text-align: center;
+
+          i {
+            font-size: 1rem;
+          }
+        }
+
+        &:nth-child(3) {
+          text-align: right;
+        }
+      }
+    }
+
+    .play__box {
+      width: 100%;
+      height: 50px;
+      margin-top: auto;
+
+      #play {
+        width: 100%;
+        height: 100%;
+        background-color: var(--bg-color);
+        color: var(--color);
+        font-size: 1rem;
+        font-weight: 600;
+        border: 0.2rem solid var(--font-color);
+        transform: scale(0.9);
+        border-radius: 1.5rem;
+
+        i {
+          margin-right: 0.7rem;
+          font-size: 1rem;
+        }
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .play__board {
+    color: var(--font-color);
+    width: 100%;
+    height: 100%;
+  }
+
+  .box {
+    width: var(--canvas-width) !important;
+    height: var(--canvas-height) !important;
+    border: 0.1rem solid var(--primary-color);
+    background-color: var(--bg-color);
+    overflow: hidden;
+    border-radius: 0.5rem;
+    color: var(--font-color);
+    font-size: 1rem;
+  }
+
+  .start_box {
+    width: 100%;
+    padding: 2rem 0;
+    @include flexbox(row, flex-start);
+
+    .start_item {
+      display: inline-block;
+      margin-right: 2rem;
+      font-size: 1rem;
+      padding: 0.3rem 2rem;
+      border-radius: 999rem;
+      border: 0.2rem solid var(--font-color);
+      background-color: var(--primary-color);
+      color: var(--font-color);
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .infor__container {
+    $height: 50px;
+    width: 100%;
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    @include flexbox(column, flex-start, flex-start);
+  }
+
+  #Canvas {
+    padding: 0;
+    cursor: crosshair;
+  }
+
+  .tutorial_box {
+    padding: 2rem;
+
+    hr {
+      margin: 0.5rem 0rem;
+    }
+
+    li {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+
+      i {
+        font-size: 1rem;
+      }
+
+      b {
+        color: var(--highlight-color);
+        font-size: 1rem;
+      }
+
+      ul {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .infor_current_player {
+    text-align: center;
+    min-height: var(--canvas-height);
+    max-height: var(--canvas-height);
+    @include flexbox(row, space-between, flex-start);
+
+    .main_infor_player {
+      width: 40%;
+      height: 100%;
+      padding: 0 5rem;
+
+      .avatar {
+        width: 100%;
+        text-align: center;
+        margin: 2rem 0;
+
+        img {
+          width: 10rem;
+          height: 10rem;
+          border-radius: 2rem;
+          box-shadow: 0 0 1rem var(--primary-color);
+
+          &:hover {
+            transition: 0.7s;
+            box-shadow: 0 0 2rem var(--primary-color);
+          }
+        }
+      }
+
+      .name,
+      .email {
+        width: 100%;
+        text-align: left;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        color: var(--font-color);
+        background-color: var(--primary-color);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        position: relative;
+        @include border_start_left_right(3px, var(--font-color), 0.7s);
+
+        i {
+          font-size: 1rem;
+        }
+      }
+
+      .something {
+        width: 100%;
+        border-radius: 1rem;
+        border: 0.1rem solid var(--font-color);
+        padding: 1rem;
+        margin-top: 1rem;
+        font-size: 1rem;
+
+        i {
+          font-size: 1rem;
+        }
+      }
+    }
+
+    .history_box {
+      width: 60%;
+      max-height: calc(var(--canvas-height) - 50px);
+      overflow: hidden auto;
+      margin-top: 25px;
+      padding-right: 1rem;
+      @include scrollbar_style(5px, var(--bg-color), var(--font-color));
+      text-align: center;
+    }
+  }
+
+  table,
+  tr,
+  td {
+    border-collapse: collapse;
+    border: 1px solid var(--bg-color);
+    padding: 0.5rem 1.5rem;
+
+  }
+
+  td {
+    text-align: center;
+    font-size: 1rem;
+    border: 0;
+  }
+
+  thead {
+    background-color: var(--primary-color);
+    border-top: 2px solid var(--font-color);
+    position: sticky;
+    top: -1px;
+    left: 0;
+  }
+
+  tbody {
+    overflow: scroll;
+  }
+
+  .history_item {
+    width: 100%;
+
+    &:hover {
+      background-color: var(--heading-color);
+      color: var(--bg-color);
+    }
+  }
+
+  .loser {
+    position: relative;
+    padding: 2rem;
+
+    #submit_score {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    h2 {
+      font-size: 1rem;
+    }
+
+    .start_box {
+      @include flexbox(row, center);
+    }
+  }
+
+  .history_match {
+    border-radius: 0.5rem;
+    overflow-y: scroll;
+    @include scrollbar_style(5px, var(--bg-color), var(--font-color));
+    padding-top: 2rem;
+    @include flexbox(column, flex-start);
+
+    .lose_player {
+      width: 100%;
+    }
+
+    .history_box {
+      max-height: calc(90% * var(--canvas-height));
+      overflow: scroll;
+    }
+
+    .start_box {
+      @include flexbox(row, center);
+    }
+  }
 }
 
 .footer {
   width: 100%;
   min-height: 40px;
   padding: 0.5rem 1rem;
-  /* margin-top: 0.5rem; */
-  /* border-radius: 999rem; */
   background-color: var(--primary-color);
   @include flexbox(row, space-between);
 
@@ -149,7 +490,7 @@ body {
 
   .social-box {
     width: 50%;
-    @include flexbox(row, space-betweent);
+    @include flexbox(row, space-between);
 
     span {
       color: var(--font-color);
@@ -158,7 +499,7 @@ body {
     }
 
     .social-item {
-      margin: 0rem 0.5rem;
+      margin: 0 0.5rem;
       position: relative;
       width: max-content;
       padding-bottom: 0.1rem;
@@ -172,34 +513,5 @@ body {
     text-align: right;
     font-weight: bolder;
     color: var(--font-color);
-  }
-}
-
-// responsive
-@media screen and (max-width: 1050px) {
-  :root {
-    --game-height: 450px;
-    --game-width: 700px;
-    --canvas-height: 420px;
-    --canvas-width: 550px;
-  }
-
-  .play__board {
-    width: var(--game-width);
-    height: var(--game-height);
-
-    .infor__container {
-      width: 100%;
-      height: 50px;
-    }
-
-    #Canvas {
-      width: var(--game-width);
-      height: var(--game-height);
-    }
-  }
-
-  .main__container {
-    @include flexbox(column);
   }
 }

@@ -1,4 +1,5 @@
 export const APP_DOM = {
+  titleGame: document.getElementById('title_game'),
   bodyEl: document.querySelector("body"),
   toggleThemeEl: document.getElementById("toggleTheme"),
   submitScoreEl: document.getElementById("submit_score"),

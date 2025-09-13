@@ -4,8 +4,15 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up</title>
+    <title>Register</title>
     <style>
+      :root {
+        --primary-color: #0d0b52;
+        --secondary-color: #3458b9;
+        --font-color: black;
+        --bg-color: #ffffff;
+        --primary-text: yellow;
+      }
       body {
         min-height: 100vh;
         display: flex;
@@ -13,34 +20,33 @@
         align-items: center;
         overflow: hidden;
         font-size: 20px;
-        background-color: rgb(5, 48, 49);
+        color: var(--font-color);
+        background-color: var(--bg-color);
       }
       a {
-        color: rgb(11, 124, 119);
-      }
-      hr {
-        background-color: rgb(11, 124, 119);
-        border: 0.1rem solid rgb(11, 124, 119);
+        color: var(--primary-text);
       }
       .panel {
         width: 35rem;
         height: max-content;
         padding: 2rem;
         margin: 0rem 0.2rem;
-        border-radius: 1rem;
-        box-shadow: 0 0 1rem black;
-        background-color: rgb(150, 238, 223);
+        border-radius: 0.5rem;
+        background-color: var(--secondary-color);
       }
       .panel-heading {
         font-weight: bold;
         font-size: 2.5rem;
         text-align: center;
       }
+      .form-group {
+        margin-bottom: 1rem;
+      }
       label {
         font-style: italic;
         margin-bottom: 0.5rem;
         font-size: 1rem;
-        padding-left: 1rem;
+        padding-left: 0.5rem;
       }
       input {
         min-width: calc(100% - 2rem);
@@ -53,15 +59,14 @@
       button {
         min-width: 100%;
         border-radius: 0.5rem;
-        background-color: lightseagreen;
-        color: yellow;
+        background-color: var(--primary-color);
+        color: var(--primary-text);
         padding: 0.5rem 0rem;
-        margin-top: 2rem;
+        border: none;
       }
       .more-option {
         display: flex;
         justify-content: space-between;
-        padding: 0rem 1rem;
         flex-wrap: wrap;
         align-items: center;
       }
@@ -69,9 +74,7 @@
   </head>
   <body>
     <div class="panel panel-primary">
-      <div class="panel-heading">Sign Up</div>
-      <%- include('../partials/header.ejs') %>
-      <hr />
+      <div class="panel-heading">Register</div>
       <form class="panel-body" method="post" action="/users/register">
         <div class="form-group">
           <label class="col-md-4">Name</label>
@@ -90,9 +93,15 @@
           <input type="password" class="form-control" name="cfm_pwd" />
         </div>
         <div class="form-group">
-          <button type="submit" class="btn btn-primary">Add User</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </form>
+      <div class="more-option">
+        <div class="option-item">
+          Already an account?
+          <a href="/users/login">login</a>
+        </div>
+      </div>
     </div>
   </body>
 </html>

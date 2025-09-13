@@ -1,11 +1,12 @@
 import { Router } from "express";
 
 function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    next();
-  } else {
-    res.redirect("/users/login");
-  }
+  next();
+  // if (req.isAuthenticated()) {
+  //   next();
+  // } else {
+  //   res.redirect("/users/login");
+  // }
 }
 export function playgroundRoutes() {
   const siteRoutes = Router();

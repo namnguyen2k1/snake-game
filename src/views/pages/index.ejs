@@ -3,16 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Snake Game</title>
+    <title>Playground</title>
     <link rel="shortcut icon" href="/logo.png" type="image/x-icon" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     />
-
     <link rel="stylesheet" href="/css/reset_css.min.css" />
-    <!-- <link rel="stylesheet" href="/css/bootstrap_grid_5.min.css" /> -->
-    <link rel="stylesheet" href="/css/atomic_class.min.css" />
     <link rel="stylesheet" href="/css/style.css" />
     <script type="module" src="/js/app.js" defer></script>
   </head>
@@ -27,62 +24,63 @@
       </div>
       <div class="nav__item" id="view_infor_player" title="View history match">
         <i class="fas fa-user" style="margin-right: 0.5rem"></i>
-        <i id="username-local"> <%= user.name %></i>
+        <i id="username-local"> <%= user?.name || 'guest' %></i>
       </div>
       <a href="/users/logout" class="nav__item" title="Log Out">
         <i class="fas fa-sign-out-alt"></i>
       </a>
     </div>
-    <!-- <%- include('../partials/rank_component.ejs') %> -->
     <div class="main__container">
       <%- include('../partials/control_component.ejs') %>
       <div class="play__board">
-        <div class="infor__container">
-          <div class="infor score" id="score_player_1">Player 1: 0</div>
-          <div class="infor" id="time_play">00:00:00</div>
-          <div class="infor score" id="score_player_2"></div>
-        </div>
         <canvas class="box" id="Canvas" width="640px" height="420px"> </canvas>
         <ul class="box tutorial_box">
-          <li>(*) Cấp độ: Khó, Trung Bình, Dễ.</li>
-          <li>(*) Tốc độ: 1xspeed, 2xspeed, 3xspeed</li>
-          <li>(*) Giao diện: Dark và Light</li>
+          <li><i class="fas fa-layer-group"></i> Levels: Easy, Medium, Hard</li>
+          <hr>
+          <li><i class="fas fa-tachometer-alt"></i> Speed: 1x, 2x, 3x</li>
+          <hr>
+          <li><i class="fas fa-adjust"></i> Theme: Dark / Light</li>
+          <hr>
           <li>
+            <i class="fas fa-gamepad"></i> Controls:
             <ul>
-              (*) Điều khiển:
-              <li>|>1_player: 1.arrow (top, right, bottom, left)</li>
-              <li>|>2_player: 1.arrow (top, right, bottom, left) 2.combo key (w, d, s, a)</li>
+              <li>1 Player: Arrow keys</li>
+              <li>2 Players: Arrow keys + WASD</li>
             </ul>
           </li>
-          <li>(*) START/PAUSE/CONTINUE: Space</li>
-          <li>(*) Xếp hạng: Easy_board, Medium_board, Hard_board.</li>
+          <hr>
+          <li><i class="fas fa-keyboard"></i> Start / Pause / Continue: <b>Space</b></li>
+          <hr>
+          <li><i class="fas fa-trophy"></i> Ranking: Easy, Medium, Hard Board</li>
+          <hr>
           <li>
+            <i class="fas fa-book"></i> Rules:
             <ul>
-              (*) Luật:
-              <li>|> Rắn chạm thành -> DIE!</li>
-              <li>
-                |> Khi ăn mồi sẽ có thời gian tiêu hóa, nếu trong thời gian này ăn thêm mồi -> DIE!
-              </li>
-              <li>|> Ăn phải con rắn khác -> DIE!</li>
-              <li>|> Có xác suất xuất hiện mồi đặc biệt</li>
+              <li>Hit the wall → <b>DIE!</b></li>
+              <li>Eat another bait before digestion ends → <b>DIE!</b></li>
+              <li>Bite another snake → <b>DIE!</b></li>
+              <li>Special bait may appear randomly</li>
             </ul>
           </li>
-          <li>(*) Download Image: Space -> Right_Click -> Save Image</li>
+          <hr>
+          <li><i class="fas fa-image"></i> Download Image: Space → Right Click → Save</li>
+          <hr>
           <li class="start_box">
-            <a class="start_item" id="play_game">Play Game</a>
+            <a class="start_item" id="play_game">
+              <i class="fas fa-play"></i> Play Game
+            </a>
           </li>
         </ul>
         <div class="box infor_current_player">
           <div class="main_infor_player">
             <div class="avatar">
-              <img src="http://localhost:3000/avatar/avatar_template.png" alt="" />
+              <img src="http://localhost:3456/images/avatar.png" alt="" />
             </div>
-            <div class="name"><i class="fas fa-user-tie"></i> <%= user.name %></div>
-            <div class="email"><i class="fas fa-envelope"></i> <%= user.email %></div>
+            <div class="name"><i class="fas fa-user-tie"></i> <%= user?.name || 'guest' %></div>
+            <div class="email"><i class="fas fa-envelope"></i> <%= user?.email || 'test@gmail.com' %></div>
             <div class="something">No pain no gain! <i class="fas fa-feather-alt"></i></div>
           </div>
           <div class="history_box">
-            <div class="title">All User</div>
             <table>
               <thead>
                 <tr class="history_item heading">
@@ -131,12 +129,11 @@
         </div>
       </div>
     </div>
-    <%- include('../partials/footer.ejs') %>
     <audio
       id="Audio"
       class="pause"
       style="display: none"
-      src="/audio/home_music.mp3"
+      src="/audio/home.mp3"
       controls
       loop
     ></audio>
@@ -144,7 +141,7 @@
       id="Audio_bait"
       class="pause"
       style="display: none"
-      src="/audio/bait_music.mp3"
+      src="/audio/ate-bait.mp3"
       controls
     ></audio>
   </body>
