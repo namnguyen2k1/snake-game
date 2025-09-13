@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Playground</title>
+    <link rel="shortcut icon" href="/logo.png" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/reset_css.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <script type="module" src="/js/app.js" defer></script>
+  </head>
+  <body>
+    <div class="navbar">
+      <div id="title_game" class="nav__item" title="Game logo">Snakee</div>
+      <div id="toggleTheme" class="nav__item light" title="Change theme">
+        <i class="fas fa-sun"></i>
+      </div>
+      <div class="nav__item" id="control_audio" title="Play/Pause music">
+        <i class="fas fa-volume-mute"></i>
+      </div>
+      <div class="nav__item" id="view_infor_player" title="View history match">
+        <i class="fas fa-user" style="margin-right: 0.5rem"></i>
+        <i id="username-local"> <%= user?.name || 'guest' %></i>
+      </div>
+      <a href="/users/logout" class="nav__item" title="Log Out">
+        <i class="fas fa-sign-out-alt"></i>
+      </a>
+    </div>
+    <div class="main__container">
+      <%- include('../partials/control_component.ejs') %>
+      <div class="play__board">
+        <canvas class="box" id="Canvas" width="640px" height="420px"> </canvas>
+        <ul class="box tutorial_box">
+          <li><i class="fas fa-layer-group"></i> Levels: Easy, Medium, Hard</li>
+          <hr>
+          <li><i class="fas fa-tachometer-alt"></i> Speed: 1x, 2x, 3x</li>
+          <hr>
+          <li><i class="fas fa-adjust"></i> Theme: Dark / Light</li>
+          <hr>
+          <li>
+            <i class="fas fa-gamepad"></i> Controls:
+            <ul>
+              <li>1 Player: Arrow keys</li>
+              <li>2 Players: Arrow keys + WASD</li>
+            </ul>
+          </li>
+          <hr>
+          <li><i class="fas fa-keyboard"></i> Start / Pause / Continue: <b>Space</b></li>
+          <hr>
+          <li><i class="fas fa-trophy"></i> Ranking: Easy, Medium, Hard Board</li>
+          <hr>
+          <li>
+            <i class="fas fa-book"></i> Rules:
+            <ul>
+              <li>Hit the wall → <b>DIE!</b></li>
+              <li>Eat another bait before digestion ends → <b>DIE!</b></li>
+              <li>Bite another snake → <b>DIE!</b></li>
+              <li>Special bait may appear randomly</li>
+            </ul>
+          </li>
+          <hr>
+          <li><i class="fas fa-image"></i> Download Image: Space → Right Click → Save</li>
+          <hr>
+          <li class="start_box">
+            <a class="start_item" id="play_game">
+              <i class="fas fa-play"></i> Play Game
+            </a>
+          </li>
+        </ul>
+        <div class="box infor_current_player">
+          <div class="main_infor_player">
+            <div class="avatar">
+              <img src="http://localhost:3456/images/avatar.png" alt="" />
+            </div>
+            <div class="name"><i class="fas fa-user-tie"></i> <%= user?.name || 'guest' %></div>
+            <div class="email"><i class="fas fa-envelope"></i> <%= user?.email || 'test@gmail.com' %></div>
+            <div class="something">No pain no gain! <i class="fas fa-feather-alt"></i></div>
+          </div>
+          <div class="history_box">
+            <table>
+              <thead>
+                <tr class="history_item heading">
+                  <td>Date</td>
+                  <td>User</td>
+                  <td>Score</td>
+                  <td>Time Play</td>
+                </tr>
+              </thead>
+              <tbody class="match-server"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="box loser">
+          <i
+            style="float: right"
+            id="submit_score"
+            onclick="saveScore(this)"
+            class="far fa-save"
+          ></i>
+          <div class="loser_box">
+            <h1>Oh không, bạn đã chết!</h1>
+            <span>Player 1.You got 1000 points. Come on, let's play again!!!</span>
+          </div>
+          <li class="start_box">
+            <a class="start_item view_history">View History </a>
+            <a class="start_item restart_game">Restart</a>
+          </li>
+        </div>
+        <div class="box history_match">
+          <div class="history name">History Local</div>
+          <table class="history_box">
+            <thead>
+              <tr class="history_item heading">
+                <td>Match</td>
+                <td>Date</td>
+                <td>Score</td>
+                <td>Time Play</td>
+              </tr>
+            </thead>
+            <tbody class="match-local"></tbody>
+          </table>
+          <div class="start_box">
+            <a class="start_item restart_game">Restart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <audio
+      id="Audio"
+      class="pause"
+      style="display: none"
+      src="/audio/home.mp3"
+      controls
+      loop
+    ></audio>
+    <audio
+      id="Audio_bait"
+      class="pause"
+      style="display: none"
+      src="/audio/ate-bait.mp3"
+      controls
+    ></audio>
+  </body>
+</html>
